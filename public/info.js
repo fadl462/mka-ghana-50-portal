@@ -1,0 +1,1 @@
+async function loadBrief(){try{const r=await fetch('/api/public/settings');if(!r.ok)return;const s=await r.json();document.querySelector('#theme').textContent=s.theme;document.querySelector('#briefText').textContent=s.brief}catch{}}loadBrief();document.querySelector('#menuToggle').onclick=()=>document.querySelector('#mainNav').classList.toggle('open');

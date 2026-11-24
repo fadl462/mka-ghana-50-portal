@@ -1,0 +1,6 @@
+*** Begin Patch
+*** Update File: src/worker.js
+@@
+-if(u.pathname==='/admin')return env.ASSETS.fetch(new Request(new URL('/admin.html',req.url)));if(u.pathname==='/judges')return env.ASSETS.fetch(new Request(new URL('/judges.html',req.url)));return env.ASSETS.fetch(req)}};
++if(u.pathname==='/admin')return env.ASSETS.fetch(new Request(new URL('/admin.html',req.url)));if(u.pathname==='/judges')return env.ASSETS.fetch(new Request(new URL('/judges.html',req.url)));if(u.pathname==='/information')return env.ASSETS.fetch(new Request(new URL('/information.html',req.url)));if(u.pathname==='/track')return env.ASSETS.fetch(new Request(new URL('/track.html',req.url)));return env.ASSETS.fetch(req)}};
+*** End Patch
