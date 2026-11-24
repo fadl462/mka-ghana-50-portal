@@ -8,7 +8,7 @@ Cloudflare Workers + D1 + R2 implementation starter for the MKA Ghana @ 50 logo 
 - Participant entry form, Atfal guardian fields and consent checkbox
 - One PNG/JPG/WebP image per submission, stored in private R2 storage
 - Unlimited independent submissions per participant (no per-participant cap)
-- Public community gallery with search, pagination and appreciation likes
+- Public entries with search, pagination and appreciation likes
 - Contestant self-withdrawal using a signed owner token held by the submitting browser
 - Unique entry reference and participant status tracking
 - Admin sign-in, dashboard, submission preview, status management and CSV export
@@ -23,7 +23,7 @@ Cloudflare Workers + D1 + R2 implementation starter for the MKA Ghana @ 50 logo 
 - Each submission accepts exactly one image file: PNG, JPEG/JPG, or WebP. PDF and SVG files are rejected.
 - The server checks the file signature as well as the declared MIME type.
 - Every entry receives its own unique reference number.
-- Entries are publicly visible in the Community Gallery unless withdrawn.
+- Entries are publicly visible in the Entries unless withdrawn.
 - Community likes are for appreciation only. Official judging remains separate and determines competition results.
 - A visitor can like an entry once per browser visitor identifier. This is a lightweight duplicate deterrent, not strong identity verification; clearing browser storage or using another browser/device can create a new identifier.
 - Contestants may withdraw their own entries using a signed owner token issued at submission and retained in that browser's local storage. A reference number and email address alone cannot withdraw an entry.
@@ -44,7 +44,7 @@ New APIs:
 
 ## Stage 3 public presentation refinements
 - Added a live public-entry preview and entry count to the homepage, populated from the existing public gallery API.
-- Added an accessible artwork detail dialog in the community gallery so visitors can inspect artwork and read the full concept rationale.
+- Added an accessible artwork detail dialog in the entries so visitors can inspect artwork and read the full concept rationale.
 - Improved gallery artwork controls for keyboard focus and added responsive layouts for the homepage preview and artwork viewer.
 - No database migration is required for Stage 3.
 
@@ -88,7 +88,7 @@ For local development use `npm run db:local`.
 npm run dev
 npm run deploy
 ```
-The Worker serves the public portal at `/`, community gallery at `/entries`, admin at `/admin`, and judges' workspace at `/judges`.
+The Worker serves the public portal at `/`, entries at `/entries`, admin at `/admin`, and judges' workspace at `/judges`.
 
 ## 5. Open submissions
 Sign in at `/admin`, open Competition settings, set `submission_open` to `true`, update the theme and brief only after approval, then save. The portal is closed by default.
@@ -145,13 +145,13 @@ The Command Centre now includes searchable/filterable submissions, visual judge 
 ## Corrective deployment — homepage source and cache
 - The Worker now explicitly serves `public/index.html` for `/` and `/index.html` instead of relying on the asset fallback route.
 - HTML routes (`/`, `/admin`, `/judges`, `/entries`, `/information`, `/track`) receive `Cache-Control: no-store, no-cache, must-revalidate` to prevent an old homepage document being retained by browser/CDN caches.
-- The homepage source is the current submission-first design with the updated navigation and community gallery preview.
+- The homepage source is the current submission-first design with the updated navigation and entries preview.
 - Deploy from the extracted `mka-ghana-50-portal-main` directory, where `wrangler.toml` and `package.json` are located. Do not deploy from the parent folder or an older project copy.
 
 
 ## Visual refresh and public URL
 - Updated the site-wide visual palette to a cool blue/sky-blue theme with soft gradients, luminous accents, airy panels and restrained motion. Reduced-motion preferences are respected.
-- Rewrote the Competition Information page to reduce long paragraphs and make the brief, eligibility, process and FAQs easier to scan. The `#brief` anchor remains available.
+- Rewrote the Competition Guidermation page to reduce long paragraphs and make the brief, eligibility, process and FAQs easier to scan. The `#brief` anchor remains available.
 - The current `workers.dev` hostname includes the Cloudflare account subdomain. This cannot be removed by editing the site's HTML or Worker name. For a branded public URL without the personal account subdomain, attach a custom domain/subdomain that the organisation owns (for example, a suitable subdomain of its official domain) under Workers & Pages → select the Worker → Settings → Domains & Routes → Add → Custom Domain. Cloudflare provisions DNS and TLS when eligible. Do not disable the existing workers.dev hostname until the custom domain is verified.
 - Changing the account-level workers.dev subdomain is possible in Cloudflare's Workers & Pages settings, but it changes the account subdomain used by Workers across the account, not just this portal. Prefer an organisation-owned custom domain for the competition.
 
