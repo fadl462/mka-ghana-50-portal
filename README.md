@@ -42,6 +42,12 @@ New APIs:
 - `POST /api/public/entries/:id/like`
 - `POST /api/submission/withdraw` (requires the owner bearer token)
 
+## Stage 3 public presentation refinements
+- Added a live public-entry preview and entry count to the homepage, populated from the existing public gallery API.
+- Added an accessible artwork detail dialog in the community gallery so visitors can inspect artwork and read the full concept rationale.
+- Improved gallery artwork controls for keyboard focus and added responsive layouts for the homepage preview and artwork viewer.
+- No database migration is required for Stage 3.
+
 ## Stage 2 contestant experience refinements\n- Artwork selection now shows an image preview, filename and file size before submission.\n- Invalid file types and files above the configured limit are rejected immediately in the browser, with a clear message. Server-side validation remains authoritative.\n- Tracking results use clearer status labels and submission timestamps.\n- Withdrawal guidance explicitly explains that the original browser holds the private owner key; reference and email alone cannot authorise withdrawal.\n\n## Security hardening in migration 0003
 - Adds per-IP, per-endpoint request throttling for administrator login, submissions, tracking, withdrawal and likes. IP addresses are keyed-hashed with `SESSION_SECRET`; raw IPs are not stored in the rate-limit table.
 - Rejects oversized submission requests early when the request supplies a `Content-Length` header, before multipart parsing. The per-file size check remains in place.
