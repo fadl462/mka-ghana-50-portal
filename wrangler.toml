@@ -8,7 +8,7 @@ run_worker_first = ["/api/*"]
 [[d1_databases]]
 binding = "DB"
 database_name = "mka-ghana-50"
-database_id = "REPLACE_WITH_D1_DATABASE_ID"
+database_id = "0d911af1-b81a-4fbf-b6da-fd5608d63c7b"
 migrations_dir = "migrations"
 [[r2_buckets]]
 binding = "FILES"
