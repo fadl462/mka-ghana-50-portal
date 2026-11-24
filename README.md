@@ -130,3 +130,13 @@ The Command Centre now includes searchable/filterable submissions, visual judge 
 - The Worker returns the signed-in judge's existing evaluation with each assigned entry. Withdrawn entries remain excluded by the existing Worker checks.
 - No database migration is required. The existing evaluation table and weighted scoring calculation are reused.
 - Important: evaluations are saved on submission; this release does not implement draft autosave or a separate draft state. Confirm the scoring rubric with the competition committee before opening judging.
+
+
+## Stage 6 — Final results and reporting
+- Adds migration `0004_official_results.sql`, which stores an official decision separately from the calculated judging status and average score.
+- Admin rankings show judge count, average score and lowest/highest submitted scores. Withdrawn entries are excluded.
+- Competition rank is calculated from average scores; exact ties share a rank and the next rank is skipped. Entries without an evaluation are unranked.
+- Super administrators and competition administrators can record an official decision (pending, winner, runner-up, finalist or not selected). Every decision is written to the audit log.
+- Official results can be exported as a CSV containing the score summary and decision. The export endpoint is authenticated and private/no-store.
+- This feature does not publish winners publicly. The committee must approve decisions and separately decide when/how results are announced.
+- Apply pending migrations with `npm run db:remote` before deploying. Back up the D1 database first.
