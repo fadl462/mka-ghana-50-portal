@@ -205,3 +205,7 @@ img{max-width:100%}
 .gallery-submit-cta{white-space:nowrap;display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:10px 18px}
 .gallery-controls{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
 @media(max-width:600px){.gallery-controls{display:grid;grid-template-columns:1fr 1fr}.gallery-submit-cta{grid-column:1/-1;justify-self:start}}
+
+/* Entries page: compact notice after removing the gallery hero */
+.gallery-notice{max-width:1100px;margin:22px auto 0;padding:12px 16px;border-left:3px solid var(--gold);background:var(--ivory);color:var(--muted);font-size:11px;line-height:1.6;border-radius:10px}
+.gallery-wrap{padding-top:30px}
