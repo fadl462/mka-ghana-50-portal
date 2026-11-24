@@ -154,3 +154,10 @@ The Command Centre now includes searchable/filterable submissions, visual judge 
 - Rewrote the Competition Information page to reduce long paragraphs and make the brief, eligibility, process and FAQs easier to scan. The `#brief` anchor remains available.
 - The current `workers.dev` hostname includes the Cloudflare account subdomain. This cannot be removed by editing the site's HTML or Worker name. For a branded public URL without the personal account subdomain, attach a custom domain/subdomain that the organisation owns (for example, a suitable subdomain of its official domain) under Workers & Pages → select the Worker → Settings → Domains & Routes → Add → Custom Domain. Cloudflare provisions DNS and TLS when eligible. Do not disable the existing workers.dev hostname until the custom domain is verified.
 - Changing the account-level workers.dev subdomain is possible in Cloudflare's Workers & Pages settings, but it changes the account subdomain used by Workers across the account, not just this portal. Prefer an organisation-owned custom domain for the competition.
+
+
+## Rounded visual refinement
+- Removed decorative directional arrow glyphs from public pages and interface messages.
+- Applied a consistent rounded-corner system to buttons, form controls, cards, artwork frames, notices, navigation elements, and content panels.
+- Retained the blue/sky-blue palette and responsive layouts.
+- No database migration or Worker API change is required.

@@ -121,3 +121,82 @@ body{background:#f9fcff;color:var(--ink)}
 .process-steps p{font-size:11px;line-height:1.7;color:var(--muted);margin:0}
 .info-note{font-size:11px;line-height:1.7;margin-top:18px}
 @media(max-width:700px){.process-steps{grid-template-columns:1fr}.info-hero{padding-top:42px;padding-bottom:42px}.brief-panel{padding:24px}}
+
+
+/* Global rounded-corner system — MKA Ghana @ 50 */
+:root{
+  --radius-xs:8px;
+  --radius-sm:12px;
+  --radius-md:16px;
+  --radius-lg:22px;
+  --radius-xl:28px;
+  --radius-pill:999px;
+}
+button,
+.button,
+.btn,
+input,
+select,
+textarea,
+.upload-zone,
+.nav-admin,
+.site-header nav a,
+.status-chip,
+.badge,
+.tag,
+.step-number,
+.progress-step,
+.form-step,
+.notice,
+.entry-note,
+.closed-state,
+.form-closed,
+.review-summary,
+.info-note,
+.compact-notice,
+.faq-list details,
+.guideline-grid article,
+.process-steps article,
+.home-gallery-card,
+.gallery-card,
+.gallery-image,
+.home-gallery-image,
+.form-card,
+.track-card,
+.login,
+.panel,
+.detail,
+.judge-review-card,
+.judge-rubric,
+.judge-empty,
+.artwork-dialog,
+.dialog-art,
+.brief-panel,
+.page-hero-mark,
+.hero-visual,
+.visual-stamp,
+.site-footer .brand img,
+.brand img,
+img{
+  border-radius:var(--radius-md);
+}
+button,.button,.btn{border-radius:var(--radius-sm)}
+input,select,textarea{border-radius:var(--radius-sm)}
+.site-header nav a{border-radius:var(--radius-pill)}
+.nav-admin{border-radius:var(--radius-sm)!important}
+.status-chip,.badge,.tag{border-radius:var(--radius-pill)}
+.form-card,.track-card,.login,.panel,.detail,.judge-review-card,
+.home-gallery-card,.gallery-card,.brief-panel,.page-hero-mark{
+  border-radius:var(--radius-lg);
+}
+.hero-visual{border-radius:var(--radius-xl);overflow:hidden}
+.home-gallery-image,.gallery-image,.dialog-art{overflow:hidden}
+.site-footer .brand img,.brand img{object-fit:contain}
+.upload-zone{border-radius:var(--radius-lg)}
+.faq-list details{border-radius:var(--radius-md);overflow:hidden}
+.guideline-grid article,.process-steps article{border-radius:var(--radius-md)}
+/* Keep large artwork and layout blocks elegant rather than pill-shaped. */
+img{max-width:100%}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{scroll-behavior:auto!important;animation:none!important;transition:none!important}
+}
