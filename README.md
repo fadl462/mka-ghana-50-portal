@@ -14,7 +14,7 @@ Cloudflare Workers + D1 + R2 implementation starter for the MKA Ghana @ 50 logo 
 - Admin sign-in, dashboard, submission preview, status management and CSV export
 - Competition settings management
 - Judge account creation, assigned-entry workspace, weighted evaluations and rankings
-- D1 migration and audit log table
+- D1 migrations, audit log and privacy-preserving request rate-limit counters
 
 
 
@@ -31,7 +31,7 @@ Cloudflare Workers + D1 + R2 implementation starter for the MKA Ghana @ 50 logo 
 
 ## Deployment notes for the community features
 1. Review the source and test locally.
-2. Apply the D1 migration with `npm run db:remote`.
+2. Apply the D1 migration with `npm run db:remote` (this applies any pending migrations, including `0003_security_rate_limits.sql`).
 3. Deploy with `npm run deploy`.
 
 New public page: `/entries`.
@@ -41,6 +41,12 @@ New APIs:
 - `GET /api/public/entry-file/:id`
 - `POST /api/public/entries/:id/like`
 - `POST /api/submission/withdraw` (requires the owner bearer token)
+
+## Security hardening in migration 0003
+- Adds per-IP, per-endpoint request throttling for administrator login, submissions, tracking, withdrawal and likes. IP addresses are keyed-hashed with `SESSION_SECRET`; raw IPs are not stored in the rate-limit table.
+- Rejects oversized submission requests early when the request supplies a `Content-Length` header, before multipart parsing. The per-file size check remains in place.
+- Like writes use `INSERT OR IGNORE`; duplicate likes are reported as already liked rather than being falsely acknowledged as a new like.
+- Administrator login now fails clearly when `SESSION_SECRET` is not configured.
 
 ## Before production
 This is a functional first implementation and requires configuration, testing and a security/privacy review before real participant data is collected. In particular, obtain committee approval for eligibility, privacy notice, parental consent, retention, IP transfer/licensing, judging and appeals rules. Review Ghana's applicable data protection requirements, especially for Atfal/minors. Confirm who is authorised to see participant details and original artwork.
@@ -102,4 +108,4 @@ Create judges under the Judges tab. Assign a submission to a judge using the aut
 - Contestant withdrawal tokens are retained in the original submitting browser. If browser storage is cleared or the contestant changes devices, the current build has no recovery mechanism. Add verified email-based recovery before launch.
 - Likes use a browser identifier for duplicate deterrence; they do not prove unique human voters and must never determine competition winners.
 - The first version has a basic assignment API; a visual assignment screen is a planned improvement.
-- Add rate limiting, upload malware scanning, email notifications, formal password reset, backup/restore testing, stronger origin restrictions and an independent security review before public launch.
+- The current release includes basic request rate limiting. Still add email-based owner recovery, upload malware scanning, email notifications, formal password reset, backup/restore testing, stronger origin restrictions and an independent security review before public launch.
