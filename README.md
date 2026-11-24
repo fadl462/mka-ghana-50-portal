@@ -147,3 +147,10 @@ The Command Centre now includes searchable/filterable submissions, visual judge 
 - HTML routes (`/`, `/admin`, `/judges`, `/entries`, `/information`, `/track`) receive `Cache-Control: no-store, no-cache, must-revalidate` to prevent an old homepage document being retained by browser/CDN caches.
 - The homepage source is the current submission-first design with the updated navigation and community gallery preview.
 - Deploy from the extracted `mka-ghana-50-portal-main` directory, where `wrangler.toml` and `package.json` are located. Do not deploy from the parent folder or an older project copy.
+
+
+## Visual refresh and public URL
+- Updated the site-wide visual palette to a cool blue/sky-blue theme with soft gradients, luminous accents, airy panels and restrained motion. Reduced-motion preferences are respected.
+- Rewrote the Competition Information page to reduce long paragraphs and make the brief, eligibility, process and FAQs easier to scan. The `#brief` anchor remains available.
+- The current `workers.dev` hostname includes the Cloudflare account subdomain. This cannot be removed by editing the site's HTML or Worker name. For a branded public URL without the personal account subdomain, attach a custom domain/subdomain that the organisation owns (for example, a suitable subdomain of its official domain) under Workers & Pages → select the Worker → Settings → Domains & Routes → Add → Custom Domain. Cloudflare provisions DNS and TLS when eligible. Do not disable the existing workers.dev hostname until the custom domain is verified.
+- Changing the account-level workers.dev subdomain is possible in Cloudflare's Workers & Pages settings, but it changes the account subdomain used by Workers across the account, not just this portal. Prefer an organisation-owned custom domain for the competition.
