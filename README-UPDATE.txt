@@ -18,3 +18,4 @@ The existing Worker currently serves /admin and /judges as page aliases, but not
 No database migration is required. The existing submission, tracking, settings, R2 upload, admin and judge APIs are retained. Keep the existing public/mka-logo.png file in the repository; it is intentionally not duplicated in this patch ZIP.
 
 Deploy only after checking the final approved competition rules, consent wording and privacy notice. The existing API currently stores participant details and artwork, so ensure the committee approves its privacy and retention approach before opening submissions.
+Git integration test – MKA Ghana @ 50.
