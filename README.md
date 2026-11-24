@@ -16,6 +16,32 @@ Cloudflare Workers + D1 + R2 implementation starter for the MKA Ghana @ 50 logo 
 - Judge account creation, assigned-entry workspace, weighted evaluations and rankings
 - D1 migration and audit log table
 
+
+
+## Submission and community rules implemented
+- Contestants may submit multiple independent entries; there is no per-participant cap.
+- Each submission accepts exactly one image file: PNG, JPEG/JPG, or WebP. PDF and SVG files are rejected.
+- The server checks the file signature as well as the declared MIME type.
+- Every entry receives its own unique reference number.
+- Entries are publicly visible in the Community Gallery unless withdrawn.
+- Community likes are for appreciation only. Official judging remains separate and determines competition results.
+- A visitor can like an entry once per browser visitor identifier. This is a lightweight duplicate deterrent, not strong identity verification; clearing browser storage or using another browser/device can create a new identifier.
+- Contestants may withdraw their own entries using a signed owner token issued at submission and retained in that browser's local storage. A reference number and email address alone cannot withdraw an entry.
+- Withdrawal is a soft status change. The entry disappears from the public gallery and public image route, cannot receive new likes, and remains in admin records/audit logs.
+
+## Deployment notes for the community features
+1. Review the source and test locally.
+2. Apply the D1 migration with `npm run db:remote`.
+3. Deploy with `npm run deploy`.
+
+New public page: `/entries`.
+
+New APIs:
+- `GET /api/public/entries`
+- `GET /api/public/entry-file/:id`
+- `POST /api/public/entries/:id/like`
+- `POST /api/submission/withdraw` (requires the owner bearer token)
+
 ## Before production
 This is a functional first implementation and requires configuration, testing and a security/privacy review before real participant data is collected. In particular, obtain committee approval for eligibility, privacy notice, parental consent, retention, IP transfer/licensing, judging and appeals rules. Review Ghana's applicable data protection requirements, especially for Atfal/minors. Confirm who is authorised to see participant details and original artwork.
 
