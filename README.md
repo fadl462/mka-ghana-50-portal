@@ -6,7 +6,10 @@ Cloudflare Workers + D1 + R2 implementation starter for the MKA Ghana @ 50 logo 
 - Neutral public landing page using the supplied MKA Ghana logo
 - Configurable competition theme, creative brief and submission opening switch
 - Participant entry form, Atfal guardian fields and consent checkbox
-- PNG/JPG/PDF/SVG upload to private R2 storage
+- One PNG/JPG/WebP image per submission, stored in private R2 storage
+- Unlimited independent submissions per participant (no per-participant cap)
+- Public community gallery with search, pagination and appreciation likes
+- Contestant self-withdrawal using a signed owner token held by the submitting browser
 - Unique entry reference and participant status tracking
 - Admin sign-in, dashboard, submission preview, status management and CSV export
 - Competition settings management
@@ -47,7 +50,7 @@ For local development use `npm run db:local`.
 npm run dev
 npm run deploy
 ```
-The Worker serves the public portal at `/`, admin at `/admin`, and judges' workspace at `/judges`.
+The Worker serves the public portal at `/`, community gallery at `/entries`, admin at `/admin`, and judges' workspace at `/judges`.
 
 ## 5. Open submissions
 Sign in at `/admin`, open Competition settings, set `submission_open` to `true`, update the theme and brief only after approval, then save. The portal is closed by default.
@@ -56,7 +59,9 @@ Sign in at `/admin`, open Competition settings, set `submission_open` to `true`,
 Create judges under the Judges tab. Assign a submission to a judge using the authenticated endpoint `POST /api/admin/assignments` with JSON `{ "submissionId": "...", "judgeId": "..." }`. The judge then signs in at `/judges` and evaluates assigned entries. Assignment UI and expanded judge administration are recommended next enhancements.
 
 ## API
-- `GET /api/health`, `GET /api/public/settings`
+- `GET /api/health`, `GET /api/public/settings`, `GET /api/public/entries`
+- `GET /api/public/entry-file/:id`, `POST /api/public/entries/:id/like`
+- `POST /api/submission/withdraw` (signed owner token required)
 - `POST /api/submit` (multipart form), `POST /api/track`
 - `POST /api/admin/login`, `GET /api/admin/me`, `GET /api/admin/overview`
 - `GET /api/admin/submissions`, `GET /api/admin/file/:id`, `PATCH /api/admin/submissions/:id/status`
@@ -67,6 +72,8 @@ Create judges under the Judges tab. Assign a submission to a judge using the aut
 ## Important implementation notes
 - Proposed scoring weights are 25/25/20/15/15. Confirm these before the competition opens.
 - Admin and judge sessions expire after 8 hours.
-- Artwork is kept in a private R2 bucket and served only through authenticated API routes.
+- Artwork is kept in a private R2 bucket. Public gallery artwork is served through a route that checks the submission is not withdrawn; admin and judge artwork routes remain authenticated.
+- Contestant withdrawal tokens are retained in the original submitting browser. If browser storage is cleared or the contestant changes devices, the current build has no recovery mechanism. Add verified email-based recovery before launch.
+- Likes use a browser identifier for duplicate deterrence; they do not prove unique human voters and must never determine competition winners.
 - The first version has a basic assignment API; a visual assignment screen is a planned improvement.
 - Add rate limiting, upload malware scanning, email notifications, formal password reset, backup/restore testing, stronger origin restrictions and an independent security review before public launch.

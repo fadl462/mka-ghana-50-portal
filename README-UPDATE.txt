@@ -1,21 +1,34 @@
-MKA GHANA @ 50 — MODERN PORTAL REDESIGN
+MKA GHANA @ 50 PORTAL — IMPLEMENTATION UPDATE
 
-This ZIP contains the redesigned public-facing files only:
-  public/index.html       New homepage with the submission form as the primary experience
-  public/information.html Dedicated competition information page
-  public/track.html       Dedicated entry tracking page
-  public/styles.css       New responsive emerald / jubilee gold / ivory visual system
-  public/app.js           Multi-step entry workflow, validation, file upload preview and confirmation
-  public/info.js          Loads the approved brief from the existing public settings API
-  public/track.js         Dedicated status lookup experience
+This update adds the public community gallery, one-like-per-browser duplicate prevention, contestant self-withdrawal, and the agreed submission rules.
 
-IMPORTANT INTEGRATION NOTE
-The existing Worker currently serves /admin and /judges as page aliases, but not /information or /track. Add these two routes in src/worker.js immediately before its final `return env.ASSETS.fetch(req)` line:
+RULES IMPLEMENTED
+- Contestants may submit multiple independent entries; the old two-entry cap is no longer enforced.
+- Each submission accepts exactly one image file: PNG, JPEG/JPG, or WebP. PDF and SVG are rejected.
+- Server checks the file signature as well as the declared MIME type.
+- Every entry has its own reference number.
+- Entries are publicly visible in the Community Gallery unless withdrawn.
+- Community likes are appreciation only. The official judging workflow remains separate and determines competition results.
+- A visitor can like an entry once per browser visitor identifier. This is a lightweight duplicate deterrent, not strong identity verification; clearing browser storage or using another browser/device can create a new visitor identifier.
+- Contestants may withdraw their own entries using a signed owner token issued at submission and retained in that browser's local storage. The reference number and email alone cannot withdraw an entry.
+- Withdrawal is a soft status change. The entry disappears from the public gallery and public image route, cannot receive new likes, and remains in admin records/audit logs.
 
-  if (u.pathname === '/information') return env.ASSETS.fetch(new Request(new URL('/information.html', req.url)));
-  if (u.pathname === '/track') return env.ASSETS.fetch(new Request(new URL('/track.html', req.url)));
+DEPLOYMENT
+1. Review the source and test locally.
+2. Apply the new D1 migration:
+   npm run db:remote
+3. Deploy:
+   npm run deploy
 
-No database migration is required. The existing submission, tracking, settings, R2 upload, admin and judge APIs are retained. Keep the existing public/mka-logo.png file in the repository; it is intentionally not duplicated in this patch ZIP.
+New public page: /entries
+New APIs:
+- GET /api/public/entries
+- GET /api/public/entry-file/:id
+- POST /api/public/entries/:id/like
+- POST /api/submission/withdraw (requires the owner bearer token)
 
-Deploy only after checking the final approved competition rules, consent wording and privacy notice. The existing API currently stores participant details and artwork, so ensure the committee approves its privacy and retention approach before opening submissions.
-Git integration test – MKA Ghana @ 50.
+IMPORTANT SECURITY NOTES
+- Configure a strong, random SESSION_SECRET in Cloudflare Worker secrets. The same secret signs admin sessions and contestant withdrawal tokens. Changing it invalidates existing sessions and owner tokens.
+- Owner tokens are stored in the browser that submitted the entry. Clearing browser data or changing devices removes access to self-withdrawal for that entry. Provide a verified email recovery flow before public launch if contestants need recovery across devices.
+- Like uniqueness is browser-based and is not a reliable measure of unique people. Do not use likes to rank or select winners.
+- Before public launch, add rate limiting, abuse monitoring, secure email recovery, backups/restore testing, stronger origin restrictions, and an independent security review.
