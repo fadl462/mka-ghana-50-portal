@@ -115,3 +115,7 @@ Create judges under the Judges tab. Assign a submission to a judge using the aut
 - Likes use a browser identifier for duplicate deterrence; they do not prove unique human voters and must never determine competition winners.
 - The first version has a basic assignment API; a visual assignment screen is a planned improvement.
 - The current release includes basic request rate limiting. Still add email-based owner recovery, upload malware scanning, email notifications, formal password reset, backup/restore testing, stronger origin restrictions and an independent security review before public launch.
+
+
+## Stage 4 — Administration workflow
+The Command Centre now includes searchable/filterable submissions, visual judge assignment and removal, assignment validation (including withdrawn-entry protection), and a recent activity log. New API routes: `GET /api/admin/assignments`, `DELETE /api/admin/assignments/:id`, and `GET /api/admin/audit`. No database migration is required; these features use the existing `judge_assignments` and `audit_logs` tables.
