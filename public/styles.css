@@ -200,3 +200,8 @@ img{max-width:100%}
 @media(prefers-reduced-motion:reduce){
   *,*::before,*::after{scroll-behavior:auto!important;animation:none!important;transition:none!important}
 }
+
+/* Navigation simplification: submission action lives on the community gallery page */
+.gallery-submit-cta{white-space:nowrap;display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:10px 18px}
+.gallery-controls{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+@media(max-width:600px){.gallery-controls{display:grid;grid-template-columns:1fr 1fr}.gallery-submit-cta{grid-column:1/-1;justify-self:start}}
