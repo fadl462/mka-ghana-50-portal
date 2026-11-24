@@ -119,3 +119,14 @@ Create judges under the Judges tab. Assign a submission to a judge using the aut
 
 ## Stage 4 — Administration workflow
 The Command Centre now includes searchable/filterable submissions, visual judge assignment and removal, assignment validation (including withdrawn-entry protection), and a recent activity log. New API routes: `GET /api/admin/assignments`, `DELETE /api/admin/assignments/:id`, and `GET /api/admin/audit`. No database migration is required; these features use the existing `judge_assignments` and `audit_logs` tables.
+
+
+## Stage 5 — Judges' workspace
+- Reworked the judges' page into a focused evaluation dashboard with assigned, completed and outstanding counts.
+- Displays each assigned anonymous artwork and its concept rationale in the review card.
+- Shows the current scoring weights (25/25/20/15/15) beside the assessment form.
+- Loads the judge's previously submitted scores and comments, allowing the judge to review and update their own evaluation.
+- Shows weighted score and submission state after a successful save.
+- The Worker returns the signed-in judge's existing evaluation with each assigned entry. Withdrawn entries remain excluded by the existing Worker checks.
+- No database migration is required. The existing evaluation table and weighted scoring calculation are reused.
+- Important: evaluations are saved on submission; this release does not implement draft autosave or a separate draft state. Confirm the scoring rubric with the competition committee before opening judging.
