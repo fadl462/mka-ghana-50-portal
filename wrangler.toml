@@ -1,17 +1,21 @@
 name = "mka-ghana-50-portal"
 main = "src/worker.js"
 compatibility_date = "2026-11-24"
+
 [assets]
 directory = "./public"
 binding = "ASSETS"
 run_worker_first = ["/api/*"]
+
 [[d1_databases]]
 binding = "DB"
 database_name = "mka-ghana-50"
 database_id = "0d911af1-b81a-4fbf-b6da-fd5608d63c7b"
 migrations_dir = "migrations"
+
 [[r2_buckets]]
 binding = "FILES"
 bucket_name = "mka-ghana-50-entries"
+
 [vars]
 APP_NAME = "MKA Ghana @ 50"
