@@ -140,3 +140,10 @@ The Command Centre now includes searchable/filterable submissions, visual judge 
 - Official results can be exported as a CSV containing the score summary and decision. The export endpoint is authenticated and private/no-store.
 - This feature does not publish winners publicly. The committee must approve decisions and separately decide when/how results are announced.
 - Apply pending migrations with `npm run db:remote` before deploying. Back up the D1 database first.
+
+
+## Corrective deployment — homepage source and cache
+- The Worker now explicitly serves `public/index.html` for `/` and `/index.html` instead of relying on the asset fallback route.
+- HTML routes (`/`, `/admin`, `/judges`, `/entries`, `/information`, `/track`) receive `Cache-Control: no-store, no-cache, must-revalidate` to prevent an old homepage document being retained by browser/CDN caches.
+- The homepage source is the current submission-first design with the updated navigation and community gallery preview.
+- Deploy from the extracted `mka-ghana-50-portal-main` directory, where `wrangler.toml` and `package.json` are located. Do not deploy from the parent folder or an older project copy.
