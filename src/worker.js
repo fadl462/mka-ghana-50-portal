@@ -65,5 +65,19 @@ if(p==='/api/admin/results/export.csv'){const r=await env.DB.prepare("SELECT s.r
 if(p==='/api/admin/export.csv'){const r=await env.DB.prepare('SELECT s.reference_code,s.title,s.status,s.created_at,p.full_name,p.email,p.phone,p.region,p.category,s.file_name FROM submissions s JOIN participants p ON p.id=s.participant_id').all(),cols=['reference_code','title','status','created_at','full_name','email','phone','region','category','file_name'],esc=v=>'"'+String(v??'').replace(/"/g,'""')+'"',csv=[cols.join(','),...(r.results||[]).map(x=>cols.map(c=>esc(x[c])).join(','))].join('\r\n');return new Response(csv,{headers:{'content-type':'text/csv','content-disposition':'attachment; filename=mka50-submissions.csv'}})}
 }
 return fail('Endpoint not found.',404)}
-async function freshHtml(assetRequest,env){const response=await env.ASSETS.fetch(assetRequest);if(!response.ok)return response;const headers=new Headers(response.headers);headers.set('cache-control','no-store, no-cache, must-revalidate, max-age=0');headers.set('pragma','no-cache');return new Response(response.body,{status:response.status,statusText:response.statusText,headers})}
-export default {async fetch(req,env){const u=new URL(req.url);if(u.pathname.startsWith('/api/')){try{return await api(req,env)}catch(e){console.error(e);return fail('Unexpected server error.',500)}}if(u.pathname==='/'||u.pathname==='/index.html')return freshHtml(new Request(new URL('/information.html',req.url),req),env);if(u.pathname==='/submit')return freshHtml(new Request(new URL('/index.html',req.url),req),env);if(u.pathname==='/admin')return freshHtml(new Request(new URL('/admin.html',req.url),req),env);if(u.pathname==='/judges')return freshHtml(new Request(new URL('/judges.html',req.url),req),env);if(u.pathname==='/entries')return freshHtml(new Request(new URL('/entries.html',req.url),req),env);if(u.pathname==='/information')return freshHtml(new Request(new URL('/information.html',req.url),req),env);if(u.pathname==='/track')return freshHtml(new Request(new URL('/track.html',req.url),req),env);return env.ASSETS.fetch(req)}};
+async function servePage(path,env){
+  // Fetch the HTML asset internally. Never issue a browser redirect for page routing.
+  const response=await env.ASSETS.fetch(new Request(`https://assets.local${path}`,{method:'GET'}));
+  if(!response.ok)return response;
+  const headers=new Headers(response.headers);
+  headers.set('cache-control','no-store, no-cache, must-revalidate, max-age=0');
+  headers.set('pragma','no-cache');
+  return new Response(response.body,{status:response.status,statusText:response.statusText,headers});
+}
+export default {async fetch(req,env){
+  const u=new URL(req.url),p=u.pathname.replace(/\/$/,'')||'/';
+  if(p.startsWith('/api/')){try{return await api(req,env)}catch(e){console.error(e);return fail('Unexpected server error.',500)}}
+  const pages={'/':'/information.html','/index.html':'/information.html','/information':'/information.html','/submit':'/index.html','/admin':'/admin.html','/judges':'/judges.html','/entries':'/entries.html','/track':'/track.html'};
+  if(pages[p]&&['GET','HEAD'].includes(req.method))return servePage(pages[p],env);
+  return env.ASSETS.fetch(req);
+}};
