@@ -211,22 +211,56 @@ img{max-width:100%}
 .gallery-wrap{padding-top:30px}
 
 
-/* Region / Ilaqa dropdown spacing */
-#entryForm select[name="region"] {
+/* Entry form field alignment and consistent control styling */
+#entryForm .field-grid {
+  align-items: start;
+  column-gap: 18px;
+  row-gap: 18px;
+}
+#entryForm .field-grid > label {
+  min-width: 0;
+}
+#entryForm .field-grid input:not([type="checkbox"]),
+#entryForm .field-grid textarea,
+#entryForm .field-grid select {
+  box-sizing: border-box;
   width: 100%;
   min-width: 0;
-  padding: 12px 44px 12px 14px;
-  margin: 5px 0 0;
-  border: 1px solid var(--line, #d9ded8);
-  border-radius: 10px;
+  min-height: 42px;
+  border: 1px solid #d8e2e8;
+  border-radius: 7px;
   background-color: #fff;
-  background-position: right 14px center;
-  color: inherit;
-  box-sizing: border-box;
-  appearance: auto;
+  padding: 11px 13px;
+  font-size: 11px;
+  line-height: 1.4;
 }
-#entryForm select[name="region"]:focus {
+#entryForm .field-grid select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  padding-right: 42px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23173553' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 13px center;
+  background-size: 14px 14px;
+  cursor: pointer;
+}
+#entryForm .field-grid input:not([type="checkbox"]):focus,
+#entryForm .field-grid textarea:focus,
+#entryForm .field-grid select:focus {
   outline: none;
-  border-color: #4da9d6;
-  box-shadow: 0 0 0 4px #4da9d620;
+  border-color: #2998cf;
+  box-shadow: 0 0 0 3px rgba(41, 152, 207, .13);
+}
+#entryForm .field-grid .field-wide > select {
+  display: block;
+}
+@media (max-width: 640px) {
+  #entryForm .field-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 14px;
+  }
+  #entryForm .field-grid > .field-wide {
+    grid-column: 1;
+  }
 }
