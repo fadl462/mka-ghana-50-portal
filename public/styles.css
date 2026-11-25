@@ -209,3 +209,24 @@ img{max-width:100%}
 /* Entries page: compact notice after removing the gallery hero */
 .gallery-notice{max-width:1100px;margin:22px auto 0;padding:12px 16px;border-left:3px solid var(--gold);background:var(--ivory);color:var(--muted);font-size:11px;line-height:1.6;border-radius:10px}
 .gallery-wrap{padding-top:30px}
+
+
+/* Region / Ilaqa dropdown spacing */
+#entryForm select[name="region"] {
+  width: 100%;
+  min-width: 0;
+  padding: 12px 44px 12px 14px;
+  margin: 5px 0 0;
+  border: 1px solid var(--line, #d9ded8);
+  border-radius: 10px;
+  background-color: #fff;
+  background-position: right 14px center;
+  color: inherit;
+  box-sizing: border-box;
+  appearance: auto;
+}
+#entryForm select[name="region"]:focus {
+  outline: none;
+  border-color: #4da9d6;
+  box-shadow: 0 0 0 4px #4da9d620;
+}
