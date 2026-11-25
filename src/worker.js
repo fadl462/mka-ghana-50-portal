@@ -26,7 +26,6 @@ async function bootstrap(env){if(!env.ADMIN_EMAIL||!env.ADMIN_PASSWORD)return;co
 async function api(req,env){const u=new URL(req.url),p=u.pathname;
 const policies=[
   ['/api/admin/login','POST','login',5,900],
-  ['/api/submit','POST','submit',10,900],
   ['/api/track','POST','track',10,900],
   ['/api/submission/withdraw','POST','withdraw',5,3600]
 ];
