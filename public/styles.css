@@ -269,3 +269,14 @@ img{max-width:100%}
 .field-grid label > b { display: inline !important; position: static; line-height: inherit; }
 
 @media(max-width:680px){.review-artwork-preview{flex-direction:column}.review-artwork-preview img{width:100%;max-height:320px}}
+
+/* Submission confirmation: concise message and clearly grouped actions */
+.success-screen{padding:22px 5px 12px}
+.success-screen h3{margin:8px 0}
+.success-screen>p:not(.eyebrow){font-size:12px;margin:0 auto;max-width:360px}
+.reference-box{margin:20px auto 18px;gap:9px}
+.reference-hint{font-size:10px;line-height:1.5;color:#758178}
+.success-actions{display:flex;align-items:center;justify-content:center;gap:22px;flex-wrap:wrap}
+.success-actions .button{min-width:150px}
+.success-actions .text-link{font-size:12px}
+@media(max-width:480px){.success-actions{flex-direction:column;gap:14px}.success-actions .button{width:100%;max-width:260px}.reference-box strong{font-size:16px;overflow-wrap:anywhere}}
