@@ -1,23 +1,46 @@
-MKA GHANA @ 50 — REVIEWER WORKSPACE UPDATE
+MKA GHANA @ 50 — REVIEWER EMAIL OTP AUTHENTICATION
 
-Files to replace in the existing project:
-- public/judges.html
-- public/judges.js
-- public/styles.css
+This package replaces the current project files and adds a D1 migration.
 
-No Worker code or D1 migration is required for this interface update.
+WHAT CHANGED
+1. Reviewer sign-in is now email + one-time verification code (OTP); no reviewer password is entered.
+2. Public/self-service reviewer registration is not available.
+3. The initial authorised reviewer is configured as fadl_rahman3@yahoo.com (Fadl Rahman Essel).
+4. OTPs expire after 10 minutes, are single-use, and allow a maximum of five verification attempts.
+5. Reviewer access is checked against the administrator-controlled reviewer_allowlist and an active judge record.
+6. Existing Command Centre administrator password login remains unchanged.
+7. Existing reviewer assignments, assessments and feedback are preserved.
 
-HOW TO CREATE A REVIEWER LOGIN
-1. Sign in to the Command Centre at https://mka-ghana-50-portal.workers.dev/admin using the existing Super Administrator account.
-2. Open the Judges tab.
-3. Under Judge accounts, enter the reviewer's name, email address and a temporary password of at least 12 characters, then select Create judge.
-4. Under Assign a submission, select an entry and the reviewer's account, then select Create assignment. Repeat for each assignment.
-5. Give the reviewer the /judges address, their email address and temporary password through a private channel.
-6. The reviewer signs in at https://mka-ghana-50-portal.workers.dev/judges.
+IMPORTANT: EMAIL DELIVERY MUST BE CONFIGURED BEFORE OTP SIGN-IN CAN WORK
+The Worker sends codes through Resend. Before testing:
+- Create/ use a Resend account.
+- Verify a sender domain in Resend and choose an authorised sender address.
+- In Cloudflare Workers > mka-ghana-50-portal > Settings > Variables and Secrets, add:
+    RESEND_API_KEY  (Secret)
+    EMAIL_FROM      (Text or Secret; e.g. MKA Ghana Review Team <reviewers@YOUR-VERIFIED-DOMAIN>)
+- Keep the existing SESSION_SECRET unchanged. Do not expose it or the Resend API key.
+- The sender address must belong to a domain verified in Resend. Do not use an invented sender address.
 
-IMPORTANT
-- The reviewer account is created in the Command Centre; it is not self-registration.
-- The account must be assigned entries before the reviewer will see any work.
-- The reviewer workspace uses the existing judge role and existing APIs. This update changes presentation and usability only.
-- There is no self-service password reset in the current system. Keep the temporary password secure and arrange a controlled password change/reset process before inviting external reviewers.
-- The site URL above reflects the current production hostname shown in the project context. If your active custom domain differs, use that domain with /admin and /judges.
+D1 MIGRATION
+The new migration is:
+    migrations/0007_reviewer_email_otp.sql
+
+Apply it to the existing production database before deploying/testing the Worker:
+    npx.cmd wrangler d1 migrations apply mka-ghana-50 --remote
+
+Then deploy from this project directory:
+    npx.cmd wrangler deploy
+
+If your terminal uses PowerShell, use npx.cmd (not npx) to avoid execution-policy issues.
+
+TEST
+1. Open https://mka-ghana-50-portal.workers.dev/judges
+2. Enter fadl_rahman3@yahoo.com and request a code.
+3. Check Inbox and Spam/Junk; enter the six-digit code within 10 minutes.
+4. Confirm the Reviewer Workspace opens. If no entries have been assigned, the page will correctly show an empty assignment state.
+5. Sign out and confirm a used code cannot be reused.
+
+ADDING THE OTHER REVIEWERS
+Send the administrator the full name and email address for each reviewer. Add each person through the controlled administrator process; never expose a public registration link. Their email must be added to reviewer_allowlist and linked to an active judge account before OTP access is granted.
+
+NO DEPLOYMENT OR EMAIL HAS BEEN PERFORMED BY THIS PACKAGE CREATION. The migration and Worker changes must be deployed, and Resend secrets configured, before a code can be sent.

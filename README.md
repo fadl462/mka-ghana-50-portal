@@ -161,3 +161,8 @@ The Command Centre now includes searchable/filterable submissions, visual judge 
 - Applied a consistent rounded-corner system to buttons, form controls, cards, artwork frames, notices, navigation elements, and content panels.
 - Retained the blue/sky-blue palette and responsive layouts.
 - No database migration or Worker API change is required.
+
+
+## Reviewer email OTP sign-in
+
+Reviewer access is administrator-controlled. Public reviewer registration is not available. The initial reviewer `fadl_rahman3@yahoo.com` is seeded by migration `0007_reviewer_email_otp.sql`. Configure the Resend `RESEND_API_KEY` and verified sender `EMAIL_FROM` Worker secrets before requesting OTP codes. See `REVIEWER-OTP-DEPLOYMENT-NOTES.txt` for deployment and test steps.

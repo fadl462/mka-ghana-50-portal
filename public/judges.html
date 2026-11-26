@@ -15,15 +15,21 @@
     <section id="judgeLogin" class="login reviewer-login">
       <p class="eyebrow">RESTRICTED ACCESS</p>
       <h1>Reviewer sign in</h1>
-      <p class="muted reviewer-intro">Sign in with the email address and password issued to you by the competition administrator.</p>
-      <div class="reviewer-login-help"><strong>Don't have reviewer access yet?</strong><span>Your account must first be created by the portal's Super Administrator. Please contact the competition administrator; public contestant accounts cannot access this workspace.</span></div>
-      <form id="judgeLoginForm" class="form reviewer-login-form">
-        <label>Email address<input name="email" type="email" autocomplete="username" placeholder="name@example.com" required></label>
-        <label>Password<div class="reviewer-password"><input id="judgePassword" name="password" type="password" autocomplete="current-password" placeholder="Enter your password" required><button id="togglePassword" type="button" class="reviewer-show-password" aria-label="Show password">Show</button></div></label>
-        <button class="btn dark reviewer-signin" type="submit">Sign in to reviewer workspace</button>
+      <p class="muted reviewer-intro">Access is limited to reviewers approved by the competition administrator. Sign in securely with a one-time code sent to your registered email.</p>
+      <div class="reviewer-login-help"><strong>Authorised reviewers only</strong><span>There is no public registration. If your email address has not been approved, contact the competition administrator.</span></div>
+      <form id="judgeEmailForm" class="form reviewer-login-form">
+        <label>Email address<input id="judgeEmail" name="email" type="email" autocomplete="email" placeholder="name@example.com" required></label>
+        <button class="btn dark reviewer-signin" type="submit">Send verification code</button>
         <output id="judgeLoginMsg" aria-live="polite"></output>
       </form>
-      <p class="reviewer-security-note">Your assigned entries and assessments are confidential. Do not share your sign-in details.</p>
+      <form id="judgeOtpForm" class="form reviewer-login-form hidden">
+        <p class="muted" id="otpSentMessage">Enter the six-digit code sent to your email address.</p>
+        <label>One-time verification code<input id="judgeOtp" name="code" type="text" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{6}" maxlength="6" placeholder="000000" required></label>
+        <button class="btn dark reviewer-signin" type="submit">Verify and sign in</button>
+        <button id="changeReviewerEmail" class="btn outline" type="button">Use a different email address</button>
+        <output id="judgeOtpMsg" aria-live="polite"></output>
+      </form>
+      <p class="reviewer-security-note">Codes expire after 10 minutes and can only be used once. Reviewer assignments and assessments are confidential.</p>
     </section>
 
     <section id="judgeArea" class="hidden reviewer-dashboard">
