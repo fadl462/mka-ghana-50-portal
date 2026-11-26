@@ -280,3 +280,21 @@ img{max-width:100%}
 .success-actions .button{min-width:150px}
 .success-actions .text-link{font-size:12px}
 @media(max-width:480px){.success-actions{flex-direction:column;gap:14px}.success-actions .button{width:100%;max-width:260px}.reference-box strong{font-size:16px;overflow-wrap:anywhere}}
+
+/* Public gallery refinements: four cards per desktop row, clean artwork-first cards. */
+.gallery-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:18px}
+.gallery-image{height:220px}
+.gallery-card-body{padding:13px}
+.gallery-contestant{font:750 14px Manrope;color:var(--green);margin:0 0 9px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.gallery-card-rating{display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:20px}
+.gallery-card-rating small{font-size:8px;color:#8a958c;white-space:nowrap}
+.rating-stars{display:inline-flex;align-items:center;gap:1px;white-space:nowrap}
+.rating-star{position:relative;display:inline-block;font-size:16px;line-height:1;color:#d9dfd8}
+.rating-star>span{position:absolute;left:0;top:0;overflow:hidden;white-space:nowrap;color:#c79a36}
+.gallery-card-foot{margin-top:11px;padding-top:10px}
+.dialog-rating{display:flex;align-items:center;gap:10px;margin:10px 0 14px}
+.dialog-rating>span:last-child{font-size:10px;color:#78857b}
+.dialog-copy small{display:block}
+@media(max-width:1100px){.gallery-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:850px){.gallery-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:600px){.gallery-grid{grid-template-columns:1fr}.gallery-image{height:260px}}
