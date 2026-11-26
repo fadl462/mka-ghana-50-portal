@@ -1,0 +1,28 @@
+MKA GHANA @ 50 — REVIEWER FEEDBACK UPDATE
+
+Files to replace in the existing project:
+- public/judges.js
+- public/track.js
+- public/styles.css
+- src/worker.js
+- migrations/0006_reviewer_feedback.sql (new migration)
+
+DATABASE STEP — REQUIRED ONCE BEFORE USING FEEDBACK
+1. Open the existing Cloudflare D1 database: mka-ghana-50.
+2. Open Console.
+3. Paste the complete contents of migrations/0006_reviewer_feedback.sql.
+4. Execute it once. It creates the reviewer_feedback table and index. It does not modify or delete existing submissions or evaluations.
+5. Deploy the updated Worker and public assets.
+
+EMAIL NOTIFICATIONS — OPTIONAL CONFIGURATION REQUIRED
+Feedback can be published and viewed securely on Track Your Entry even before email is configured. To send email alerts, configure these Worker settings in Cloudflare:
+- RESEND_API_KEY: add as a Secret containing an API key for Resend.
+- EMAIL_FROM: add as a variable containing a sender address verified with Resend, for example a sender on your verified domain.
+
+The email contains a direct link to /track on the same live site, the submission reference, and instructions to enter the registered email address. The tracking endpoint only returns published feedback after the reference and registered email match.
+
+BEHAVIOUR
+- Existing evaluation comments remain internal to the judging process.
+- The new contestant feedback field is separate and only becomes visible after the reviewer explicitly publishes it.
+- Publishing triggers an email when Resend is configured. If it is not configured or delivery fails, feedback remains available on Track Your Entry and the reviewer receives an accurate status message.
+- Contestants cannot access feedback belonging to another submission.
