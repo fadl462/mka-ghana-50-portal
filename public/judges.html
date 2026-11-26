@@ -15,21 +15,15 @@
     <section id="judgeLogin" class="login reviewer-login">
       <p class="eyebrow">RESTRICTED ACCESS</p>
       <h1>Reviewer sign in</h1>
-      <p class="muted reviewer-intro">Access is limited to reviewers approved by the competition administrator. Sign in securely with a one-time code sent to your registered email.</p>
+      <p class="muted reviewer-intro">Access is limited to reviewers approved by the competition administrator. Sign in with the email address and password issued to you.</p>
       <div class="reviewer-login-help"><strong>Authorised reviewers only</strong><span>There is no public registration. If your email address has not been approved, contact the competition administrator.</span></div>
-      <form id="judgeEmailForm" class="form reviewer-login-form">
-        <label>Email address<input id="judgeEmail" name="email" type="email" autocomplete="email" placeholder="name@example.com" required></label>
-        <button class="btn dark reviewer-signin" type="submit">Send verification code</button>
+      <form id="judgePasswordForm" class="form reviewer-login-form">
+        <label>Email address<input id="judgeEmail" name="email" type="email" autocomplete="username" placeholder="name@example.com" required></label>
+        <label>Password<input id="judgePassword" name="password" type="password" autocomplete="current-password" placeholder="Enter your password" required></label>
+        <button class="btn dark reviewer-signin" type="submit">Sign in</button>
         <output id="judgeLoginMsg" aria-live="polite"></output>
       </form>
-      <form id="judgeOtpForm" class="form reviewer-login-form hidden">
-        <p class="muted" id="otpSentMessage">Enter the six-digit code sent to your email address.</p>
-        <label>One-time verification code<input id="judgeOtp" name="code" type="text" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{6}" maxlength="6" placeholder="000000" required></label>
-        <button class="btn dark reviewer-signin" type="submit">Verify and sign in</button>
-        <button id="changeReviewerEmail" class="btn outline" type="button">Use a different email address</button>
-        <output id="judgeOtpMsg" aria-live="polite"></output>
-      </form>
-      <p class="reviewer-security-note">Codes expire after 10 minutes and can only be used once. Reviewer assignments and assessments are confidential.</p>
+      <p class="reviewer-security-note">Reviewer access is administrator-controlled. Reviewer assignments and assessments are confidential.</p>
     </section>
 
     <section id="judgeArea" class="hidden reviewer-dashboard">

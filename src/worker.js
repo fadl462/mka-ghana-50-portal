@@ -5,10 +5,6 @@ async function hash(p,salt){const s=salt?Uint8Array.from(salt.match(/.{2}/g).map
 const b64=s=>btoa(String.fromCharCode(...new TextEncoder().encode(s))).replace(/=/g,'').replace(/\+/g,'-').replace(/\//g,'_');
 async function tokenSign(p,secret){const body=b64(JSON.stringify(p)),k=await crypto.subtle.importKey('raw',new TextEncoder().encode(secret),{name:'HMAC',hash:'SHA-256'},false,['sign']),sig=await crypto.subtle.sign('HMAC',k,new TextEncoder().encode(body));return body+'.'+btoa(String.fromCharCode(...new Uint8Array(sig))).replace(/=/g,'').replace(/\+/g,'-').replace(/\//g,'_')}
 async function tokenRead(t,secret){try{const [body,sig]=t.split('.'),k=await crypto.subtle.importKey('raw',new TextEncoder().encode(secret),{name:'HMAC',hash:'SHA-256'},false,['verify']),bytes=Uint8Array.from(atob(sig.replace(/-/g,'+').replace(/_/g,'/')),c=>c.charCodeAt(0));if(!await crypto.subtle.verify('HMAC',k,bytes,new TextEncoder().encode(body)))return null;const p=JSON.parse(atob(body.replace(/-/g,'+').replace(/_/g,'/')));return p.exp>Date.now()?p:null}catch{return null}}
-async function otpDigest(email,code,secret){
-  const bytes=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(secret+':reviewer-otp:'+email+':'+code));
-  return [...new Uint8Array(bytes)].map(x=>x.toString(16).padStart(2,'0')).join('');
-}
 async function session(req,env){const t=(req.headers.get('authorization')||'').replace(/^Bearer\s+/i,'');return t&&env.SESSION_SECRET?tokenRead(t,env.SESSION_SECRET):null}
 async function settings(env){const r=await env.DB.prepare('SELECT key,value FROM competition_settings').all();return Object.fromEntries((r.results||[]).map(x=>[x.key,x.value]))}
 async function rateLimit(req,env,key,limit,windowSeconds){
@@ -30,8 +26,7 @@ async function bootstrap(env){if(!env.ADMIN_EMAIL||!env.ADMIN_PASSWORD)return;co
 async function api(req,env){const u=new URL(req.url),p=u.pathname;
 const policies=[
   ['/api/admin/login','POST','login',5,900],
-  ['/api/judge/request-otp','POST','judge-otp-request',4,900],
-  ['/api/judge/verify-otp','POST','judge-otp-verify',8,900],
+  ['/api/judge/login','POST','judge-login',5,900],
   ['/api/track','POST','track',10,900],
   ['/api/submission/withdraw','POST','withdraw',5,3600]
 ];
@@ -52,35 +47,19 @@ if(p.startsWith('/api/public/entry-file/')){const id=p.split('/').pop(),x=await 
 if(p.startsWith('/api/public/entries/')&&p.endsWith('/like')&&req.method==='POST'){const id=p.split('/')[4],b=await req.json(),visitor=clean(b.visitorId,100);if(!/^[a-f0-9-]{32,36}$/i.test(visitor))return fail('Invalid visitor identifier.');const exists=await env.DB.prepare("SELECT id FROM submissions WHERE id=? AND status!='withdrawn'").bind(id).first();if(!exists)return fail('This entry is unavailable for likes.',404);const secret=env.SESSION_SECRET;if(!secret)return fail('Portal security is not configured.',503);const digest=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(secret+':'+visitor));const voter=[...new Uint8Array(digest)].map(x=>x.toString(16).padStart(2,'0')).join('');const prior=await env.DB.prepare('SELECT id FROM submission_likes WHERE submission_id=? AND voter_hash=?').bind(id,voter).first();let liked;if(prior){await env.DB.prepare('DELETE FROM submission_likes WHERE submission_id=? AND voter_hash=?').bind(id,voter).run();liked=false}else{await env.DB.prepare('INSERT OR IGNORE INTO submission_likes(id,submission_id,voter_hash) VALUES(?,?,?)').bind(uid(),id,voter).run();liked=true}const n=await env.DB.prepare('SELECT COUNT(*) n FROM submission_likes WHERE submission_id=?').bind(id).first();return json({ok:true,liked,likes:n.n})}
 if(p==='/api/submit'&&req.method==='POST'){const s=await settings(env);if(!env.SESSION_SECRET)return fail('Portal security is not configured. Please contact the organisers.',503);const maxBytes=(+(s.max_upload_mb||12))*1048576+1048576,contentLength=Number(req.headers.get('content-length')||0);if(contentLength&&contentLength>maxBytes)return fail('The upload request exceeds the permitted size.',413);const f=await req.formData(),v=k=>clean(f.get(k));const name=v('fullName'),email=v('email').toLowerCase(),phone=v('phone'),region=v('region'),category=v('category'),title=v('title'),rationale=v('rationale'),guardianName=v('guardianName'),guardianPhone=v('guardianPhone'),guardianConsent=f.get('guardianConsent')==='on',file=f.get('artwork');if(f.getAll('artwork').length!==1)return fail('Attach exactly one image per submission.');if(!name||!validEmail(email)||!phone||!region||!title||!rationale||!['khuddam','atfal','lajna','ansar'].includes(category)||f.get('acceptedTerms')!=='on')return fail('Complete all required fields and accept the competition terms.');if(category==='atfal'&&(!guardianName||!guardianPhone||!guardianConsent))return fail('Atfal entries require parent/guardian details and consent.');if(!(file instanceof File)||!file.size)return fail('Attach exactly one image.');if(file.size>+(s.max_upload_mb||12)*1048576)return fail('File exceeds the upload limit.');if(!['image/png','image/jpeg','image/webp'].includes(file.type))return fail('Upload one PNG, JPG or WebP image.');const head=new Uint8Array(await file.slice(0,12).arrayBuffer()),isPng=head.length>=8&&[137,80,78,71,13,10,26,10].every((v,i)=>head[i]===v),isJpg=head[0]===255&&head[1]===216&&head[2]===255,isWebp=head.length>=12&&String.fromCharCode(...head.slice(0,4))==='RIFF'&&String.fromCharCode(...head.slice(8,12))==='WEBP';if(!((file.type==='image/png'&&isPng)||(file.type==='image/jpeg'&&isJpg)||(file.type==='image/webp'&&isWebp)))return fail('The uploaded file content does not match its PNG, JPG or WebP file type.');const pid=uid(),sid=uid(),ref='MKA50-2027-'+Date.now().toString().slice(-6)+'-'+crypto.getRandomValues(new Uint8Array(2)).join(''),key='submissions/'+sid+'/'+clean(file.name,100).replace(/[^a-zA-Z0-9._-]/g,'_'),legacyCategory=category==='atfal'?'atfal':'khuddam';await env.FILES.put(key,file.stream(),{httpMetadata:{contentType:file.type}});try{await env.DB.batch([env.DB.prepare('INSERT INTO participants(id,full_name,email,phone,region,category,tanzeem,guardian_name,guardian_phone,guardian_consent) VALUES(?,?,?,?,?,?,?,?,?,?)').bind(pid,name,email,phone,region,legacyCategory,category,guardianName||null,guardianPhone||null,guardianConsent?1:0),env.DB.prepare('INSERT INTO submissions(id,participant_id,reference_code,title,rationale,file_key,file_name,file_type,file_size) VALUES(?,?,?,?,?,?,?,?,?)').bind(sid,pid,ref,title,rationale,key,clean(file.name,100),file.type,file.size)])}catch(e){await env.FILES.delete(key);throw e}return json({ok:true,reference:ref},201)}
 if(p==='/api/track'&&req.method==='POST'){const b=await req.json(),ref=clean(b.reference).toUpperCase(),email=clean(b.email).toLowerCase();const x=await env.DB.prepare('SELECT s.id,s.reference_code,s.title,s.status,s.created_at FROM submissions s JOIN participants p ON p.id=s.participant_id WHERE s.reference_code=? AND lower(p.email)=?').bind(ref,email).first();if(!x)return fail('No matching entry found.',404);const f=await env.DB.prepare("SELECT id,message,created_at,updated_at FROM reviewer_feedback WHERE submission_id=? AND visibility='published' ORDER BY created_at ASC").bind(x.id).all();return json({reference:x.reference_code,title:x.title,status:x.status,submittedAt:x.created_at,feedback:f.results||[]})}
-if(p==='/api/judge/request-otp'&&req.method==='POST'){
-  if(!env.SESSION_SECRET||!env.RESEND_API_KEY||!env.EMAIL_FROM)return fail('Reviewer email sign-in is not configured yet. Please contact the portal administrator.',503);
-  const b=await req.json(),email=clean(b.email,254).toLowerCase();
-  if(!validEmail(email))return fail('Enter a valid email address.');
-  const allowed=await env.DB.prepare("SELECT a.email,a.display_name FROM reviewer_allowlist a JOIN admin_users u ON lower(u.email)=a.email AND u.role='judge' AND u.active=1 WHERE a.email=? AND a.active=1").bind(email).first();
-  if(!allowed)return fail('This email address is not authorised for reviewer access. Please contact the competition administrator.',403);
-  const code=String(crypto.getRandomValues(new Uint32Array(1))[0]%1000000).padStart(6,'0');
-  const id=uid(),expires=Math.floor(Date.now()/1000)+600,digest=await otpDigest(email,code,env.SESSION_SECRET);
-  await env.DB.prepare('DELETE FROM reviewer_login_otps WHERE email=? OR expires_at<? OR consumed_at IS NOT NULL').bind(email,Math.floor(Date.now()/1000)).run();
-  await env.DB.prepare('INSERT INTO reviewer_login_otps(id,email,code_hash,expires_at) VALUES(?,?,?,?)').bind(id,email,digest,expires).run();
-  const mail=await fetch('https://api.resend.com/emails',{method:'POST',headers:{'Authorization':'Bearer '+env.RESEND_API_KEY,'Content-Type':'application/json'},body:JSON.stringify({from:env.EMAIL_FROM,to:[email],subject:'Your MKA Ghana @ 50 reviewer sign-in code',text:'Hello '+allowed.display_name+',\n\nYour one-time sign-in code for the MKA Ghana @ 50 Reviewer Workspace is: '+code+'\n\nThis code expires in 10 minutes and can only be used once. If you did not request it, you can ignore this email.\n\nMKA Ghana @ 50 Competition Team'})});
-  if(!mail.ok){await env.DB.prepare('DELETE FROM reviewer_login_otps WHERE id=?').bind(id).run();console.error('Reviewer OTP email delivery failed',mail.status);return fail('We could not send the verification email. Please try again shortly or contact the administrator.',502)}
-  return json({ok:true,message:'A one-time code has been sent to your authorised email address.'});
-}
-if(p==='/api/judge/verify-otp'&&req.method==='POST'){
-  if(!env.SESSION_SECRET)return fail('Portal security is not configured.',503);
-  const b=await req.json(),email=clean(b.email,254).toLowerCase(),code=clean(b.code,6);
-  if(!validEmail(email)||!/^\\d{6}$/.test(code))return fail('Enter your email address and the six-digit code.');
-  const row=await env.DB.prepare('SELECT * FROM reviewer_login_otps WHERE email=? AND consumed_at IS NULL ORDER BY created_at DESC LIMIT 1').bind(email).first();
-  if(!row||row.expires_at<Math.floor(Date.now()/1000))return fail('That code has expired. Request a new one.',401);
-  if(row.attempts>=5)return fail('Too many incorrect attempts. Request a new code.',429);
-  const actual=await otpDigest(email,code,env.SESSION_SECRET);
-  if(actual!==row.code_hash){await env.DB.prepare('UPDATE reviewer_login_otps SET attempts=attempts+1 WHERE id=?').bind(row.id).run();return fail('The verification code is incorrect.',401)}
-  const allowed=await env.DB.prepare("SELECT a.display_name,u.id,u.email,u.role FROM reviewer_allowlist a JOIN admin_users u ON lower(u.email)=a.email AND u.role='judge' AND u.active=1 WHERE a.email=? AND a.active=1").bind(email).first();
-  if(!allowed)return fail('Reviewer access is no longer authorised.',403);
-  await env.DB.prepare('UPDATE reviewer_login_otps SET consumed_at=? WHERE id=?').bind(Math.floor(Date.now()/1000),row.id).run();
-  const user={sub:allowed.id,email:allowed.email,name:allowed.display_name,role:allowed.role,exp:Date.now()+28800000};
-  return json({token:await tokenSign(user,env.SESSION_SECRET),user});
-}
+if(p==='/api/judge/login'&&req.method==='POST'){
+   if(!env.SESSION_SECRET)return fail('Portal security is not configured.',503);
+   const b=await req.json(),email=clean(b.email,254).toLowerCase(),password=String(b.password||'');
+   if(!validEmail(email)||!password||password.length>256)return fail('Enter your authorised email address and password.');
+   const allowed=await env.DB.prepare("SELECT u.* FROM admin_users u JOIN reviewer_allowlist a ON a.email=lower(u.email) AND a.active=1 WHERE lower(u.email)=? AND u.role='judge' AND u.active=1").bind(email).first();
+   if(!allowed)return fail('Invalid reviewer email or password.',401);
+   const [salt,expected]=String(allowed.password_hash||'').split(':');
+   if(!salt||!expected)return fail('Reviewer account is not configured. Contact the competition administrator.',403);
+   const actual=await hash(password,salt);
+   if(actual.hash!==expected)return fail('Invalid reviewer email or password.',401);
+   const user={sub:allowed.id,email:allowed.email,name:allowed.display_name,role:allowed.role,exp:Date.now()+28800000};
+   return json({token:await tokenSign(user,env.SESSION_SECRET),user});
+ }
 if(p==='/api/admin/login'&&req.method==='POST'){if(!env.SESSION_SECRET)return fail('Portal security is not configured.',503);await bootstrap(env);const b=await req.json(),email=clean(b.email).toLowerCase(),u=await env.DB.prepare('SELECT * FROM admin_users WHERE email=? AND active=1').bind(email).first();if(!u)return fail('Invalid email or password.',401);const [salt,expected]=u.password_hash.split(':'),actual=await hash(String(b.password||''),salt);if(actual.hash!==expected)return fail('Invalid email or password.',401);const user={sub:u.id,email:u.email,name:u.display_name,role:u.role,exp:Date.now()+28800000};return json({token:await tokenSign(user,env.SESSION_SECRET),user})}
 if(p.startsWith('/api/admin/')||p.startsWith('/api/judge/')){const user=await session(req,env);if(!user)return fail('Authentication required.',401);if(p.startsWith('/api/admin/')&&!['super_admin','competition_admin','secretary','read_only'].includes(user.role))return fail('Insufficient permissions.',403);if(p.startsWith('/api/judge/')&&!['judge','super_admin'].includes(user.role))return fail('Insufficient permissions.',403);
 if(p==='/api/admin/me')return json({user:{name:user.name,email:user.email,role:user.role}});

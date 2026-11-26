@@ -163,6 +163,7 @@ The Command Centre now includes searchable/filterable submissions, visual judge 
 - No database migration or Worker API change is required.
 
 
-## Reviewer email OTP sign-in
+## Reviewer email/password sign-in
 
-Reviewer access is administrator-controlled. Public reviewer registration is not available. The initial reviewer `fadl_rahman3@yahoo.com` is seeded by migration `0007_reviewer_email_otp.sql`. Configure the Resend `RESEND_API_KEY` and verified sender `EMAIL_FROM` Worker secrets before requesting OTP codes. See `REVIEWER-OTP-DEPLOYMENT-NOTES.txt` for deployment and test steps.
+Reviewer access is administrator-controlled. Public reviewer registration is disabled. The initial reviewer `fadl_rahman3@yahoo.com` is provisioned by migration `0008_reviewer_password_login.sql`. Reviewer passwords are stored as PBKDF2-SHA256 hashes; no Resend or email OTP configuration is required for reviewer login. See `REVIEWER-PASSWORD-DEPLOYMENT-NOTES.txt` for deployment and access details.
+
