@@ -1,0 +1,23 @@
+MKA GHANA @ 50 — REVIEWER WORKSPACE UPDATE
+
+Files to replace in the existing project:
+- public/judges.html
+- public/judges.js
+- public/styles.css
+
+No Worker code or D1 migration is required for this interface update.
+
+HOW TO CREATE A REVIEWER LOGIN
+1. Sign in to the Command Centre at https://mka-ghana-50-portal.workers.dev/admin using the existing Super Administrator account.
+2. Open the Judges tab.
+3. Under Judge accounts, enter the reviewer's name, email address and a temporary password of at least 12 characters, then select Create judge.
+4. Under Assign a submission, select an entry and the reviewer's account, then select Create assignment. Repeat for each assignment.
+5. Give the reviewer the /judges address, their email address and temporary password through a private channel.
+6. The reviewer signs in at https://mka-ghana-50-portal.workers.dev/judges.
+
+IMPORTANT
+- The reviewer account is created in the Command Centre; it is not self-registration.
+- The account must be assigned entries before the reviewer will see any work.
+- The reviewer workspace uses the existing judge role and existing APIs. This update changes presentation and usability only.
+- There is no self-service password reset in the current system. Keep the temporary password secure and arrange a controlled password change/reset process before inviting external reviewers.
+- The site URL above reflects the current production hostname shown in the project context. If your active custom domain differs, use that domain with /admin and /judges.
