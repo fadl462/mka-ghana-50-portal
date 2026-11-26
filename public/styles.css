@@ -301,3 +301,35 @@ img{max-width:100%}
 
 /* Public gallery rating score */
 .rating-score{font-size:9px;font-weight:800;color:#526457;margin-left:5px;white-space:nowrap}
+
+/* Artwork viewer: reference and rating above the artwork, with in-viewer navigation. */
+.artwork-dialog{width:min(1120px,calc(100% - 36px));max-width:1120px;max-height:92vh;overflow:hidden;display:none;flex-direction:column;padding:0}
+.artwork-dialog[open]{display:flex}
+.dialog-topline{position:relative;z-index:1;display:flex;align-items:center;justify-content:space-between;gap:18px;min-height:58px;padding:10px 66px 10px 24px;background:#fff;border-bottom:1px solid #e6eef5}
+.dialog-reference{font-size:10px;font-weight:800;letter-spacing:.8px;color:#214f78;overflow-wrap:anywhere}
+.dialog-rating{display:flex;align-items:center;justify-content:flex-end;gap:9px;margin:0;white-space:nowrap}
+.dialog-rating strong{font-size:13px;color:#214f78}
+.dialog-rating .dialog-unrated{font-size:10px;color:#9aa9b7}
+.dialog-close{right:12px;top:10px;width:36px;height:36px;background:#174b75;box-shadow:0 2px 8px #123b6622}
+.dialog-artwork-stage{position:relative;display:flex;align-items:center;justify-content:center;min-height:260px;max-height:64vh;padding:0 62px;background:linear-gradient(135deg,#eaf7ff,#f7fcff)}
+.dialog-art{display:flex;align-items:center;justify-content:center;width:100%;height:100%;min-height:260px;max-height:64vh;background:transparent;overflow:hidden}
+.dialog-art img{display:block;width:100%;height:100%;max-width:100%;max-height:64vh;object-fit:contain}
+.artwork-nav{position:absolute;z-index:3;top:50%;transform:translateY(-50%);display:grid;place-items:center;width:46px;height:58px;border:1px solid #c9e1f2;border-radius:12px;background:#fff;color:#175b8d;box-shadow:0 5px 20px #123b6620;font:400 38px/1 Arial,sans-serif;cursor:pointer;transition:background .15s ease,transform .15s ease}
+.artwork-nav:hover:not(:disabled){background:#eaf7ff;transform:translateY(-50%) scale(1.04)}
+.artwork-nav:disabled{opacity:.28;cursor:not-allowed;box-shadow:none}
+.artwork-nav-prev{left:12px}.artwork-nav-next{right:12px}
+.dialog-copy{padding:18px 24px 22px;max-height:22vh;overflow:auto}
+.dialog-copy .eyebrow{margin:0 0 5px}.dialog-copy h2{margin:4px 0 7px;font-size:21px}.dialog-copy p:not(.eyebrow){margin:0}
+@media(max-width:700px){
+ .artwork-dialog{width:calc(100% - 16px);max-height:94vh}
+ .dialog-topline{min-height:54px;padding:9px 54px 9px 13px;gap:8px}
+ .dialog-reference{font-size:8px;letter-spacing:.3px}
+ .dialog-rating{gap:5px}.dialog-rating .rating-stars{font-size:14px}.dialog-rating strong{font-size:11px}
+ .dialog-close{right:8px;top:8px;width:34px;height:34px}
+ .dialog-artwork-stage{padding:0 42px;min-height:220px;max-height:58vh}
+ .dialog-art{min-height:220px;max-height:58vh}
+ .dialog-art img{max-height:58vh}
+ .artwork-nav{width:34px;height:46px;font-size:30px;border-radius:9px}
+ .artwork-nav-prev{left:5px}.artwork-nav-next{right:5px}
+ .dialog-copy{padding:14px 16px 18px;max-height:24vh}
+}
