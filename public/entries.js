@@ -1,8 +1,33 @@
 const $=s=>document.querySelector(s);
 let page=1,pages=1,searchTimer;
-let viewerEntries=[],viewerIndex=-1,viewerPage=1,viewerBusy=false;
+let viewerEntries=[],viewerIndex=-1,viewerPage=1,viewerBusy=false,initialRestoreDone=false;
+const initialParams=new URLSearchParams(location.search);
+page=Math.max(1,Number(initialParams.get('page'))||1);
+if(initialParams.has('sort'))$('#gallerySort').value=initialParams.get('sort');
+if(initialParams.has('q'))$('#gallerySearch').value=initialParams.get('q');
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function visitorId(){let id=localStorage.getItem('mka50_visitor_id');if(!id){id=crypto.randomUUID();localStorage.setItem('mka50_visitor_id',id)}return id}
+function syncViewerUrl(id){
+ const url=new URL(location.href);
+ if(id)url.searchParams.set('entry',id);else url.searchParams.delete('entry');
+ url.searchParams.set('page',String(viewerPage||page));
+ url.searchParams.set('sort',$('#gallerySort').value);
+ if($('#gallerySearch').value.trim())url.searchParams.set('q',$('#gallerySearch').value.trim());else url.searchParams.delete('q');
+ history.replaceState({entry:id||null},'',url.pathname+url.search+url.hash);
+}
+async function restoreViewerFromUrl(){
+ const id=new URL(location.href).searchParams.get('entry');if(!id)return;
+ try{
+  const qs=new URLSearchParams({entryId:id,visitorId:visitorId()});
+  const r=await fetch('/api/public/entries?'+qs),d=await r.json();
+  if(!r.ok||!d.entry)throw Error(d.error||'This artwork is no longer available.');
+  const listPage=Math.max(1,Number(new URL(location.href).searchParams.get('page'))||Math.ceil((Number(d.position)||1)/20));
+  const pageQs=new URLSearchParams({page:listPage,sort:$('#gallerySort').value,q:$('#gallerySearch').value.trim(),visitorId:visitorId()});
+  const pageRes=await fetch('/api/public/entries?'+pageQs),pageData=await pageRes.json();
+  viewerEntries=pageData.entries||[d.entry];viewerIndex=Math.max(0,viewerEntries.findIndex(x=>x.id===id));viewerPage=listPage;
+  renderArtwork();$('#artworkDialog').showModal();
+ }catch(e){syncViewerUrl(null);console.warn(e)}
+}
 function stars(score){
   const rated=score!==null&&score!==undefined&&score!=='';
   const value=rated?Math.max(0,Math.min(5,Number(score)/20)):0;
@@ -15,7 +40,7 @@ async function load(){
  try{
   const r=await fetch('/api/public/entries?'+qs),d=await r.json();
   if(!r.ok)throw Error(d.error||'Could not load entries.');
-  pages=d.pages;$('#galleryCount').textContent=`${d.total} public ${d.total===1?'entry':'entries'}`;
+  pages=d.pages;viewerPage=page;syncViewerUrl(new URL(location.href).searchParams.get('entry'));$('#galleryCount').textContent=`${d.total} public ${d.total===1?'entry':'entries'}`;
   $('#pageLabel').textContent=`Page ${page} of ${pages}`;$('#prevPage').disabled=page<=1;$('#nextPage').disabled=page>=pages;
   if(!d.entries.length){grid.innerHTML='<p class="gallery-empty">No public entries match your search yet.</p>';return}
   grid.innerHTML=d.entries.map(x=>`<article class="gallery-card">
@@ -29,6 +54,7 @@ async function load(){
    </div></article>`).join('');
   grid.querySelectorAll('.like-button').forEach(b=>b.onclick=()=>like(b));
   grid.querySelectorAll('[data-open]').forEach(b=>b.onclick=()=>openArtwork(d.entries.findIndex(x=>x.id===b.dataset.open),d.entries,page));
+  if(!initialRestoreDone){initialRestoreDone=true;await restoreViewerFromUrl()}
  }catch(e){grid.innerHTML=`<p class="gallery-empty">${esc(e.message)}</p>`}
 }
 async function like(b){
@@ -47,6 +73,7 @@ async function like(b){
 }
 function renderArtwork(){
  const x=viewerEntries[viewerIndex];if(!x)return;
+ syncViewerUrl(x.id);
  $('#dialogImage').src=`/api/public/entry-file/${encodeURIComponent(x.id)}`;
  $('#dialogImage').alt=`Artwork submitted by ${x.full_name}`;
  $('#dialogTitle').textContent=x.title||'Untitled entry';
@@ -77,11 +104,12 @@ async function moveArtwork(direction){
  }catch(e){alert(e.message)}
  finally{viewerBusy=false;renderArtwork()}
 }
-$('#dialogClose').onclick=()=>$('#artworkDialog').close();
+$('#dialogClose').onclick=()=>{syncViewerUrl(null);$('#artworkDialog').close()};
 $('#artworkPrev').onclick=()=>moveArtwork(-1);
 $('#artworkNext').onclick=()=>moveArtwork(1);
 document.addEventListener('keydown',e=>{if(!$('#artworkDialog').open)return;if(e.key==='ArrowLeft'){e.preventDefault();moveArtwork(-1)}else if(e.key==='ArrowRight'){e.preventDefault();moveArtwork(1)}});
-$('#artworkDialog').addEventListener('click',e=>{if(e.target===$('#artworkDialog'))$('#artworkDialog').close()});
+$('#artworkDialog').addEventListener('click',e=>{if(e.target===$('#artworkDialog')){syncViewerUrl(null);$('#artworkDialog').close()}});
+$('#artworkDialog').addEventListener('close',()=>{if(new URL(location.href).searchParams.has('entry'))syncViewerUrl(null)});
 $('#gallerySearch').oninput=()=>{clearTimeout(searchTimer);searchTimer=setTimeout(()=>{page=1;load()},250)};
 $('#gallerySort').onchange=()=>{page=1;load()};
 $('#prevPage').onclick=()=>{if(page>1){page--;load()}};
