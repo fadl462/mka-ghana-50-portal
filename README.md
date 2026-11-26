@@ -88,13 +88,13 @@ For local development use `npm run db:local`.
 npm run dev
 npm run deploy
 ```
-The Worker serves the public portal at `/`, entries at `/entries`, admin at `/admin`, and judges' workspace at `/judges`.
+The Worker serves the public portal at `/`, entries at `/entries`, admin at `/admin`, and judges' workspace at `/reviewer`.
 
 ## 5. Open submissions
 Sign in at `/admin`, open Competition settings, set `submission_open` to `true`, update the theme and brief only after approval, then save. The portal is closed by default.
 
 ## Judge workflow
-Create judges under the Judges tab. Assign a submission to a judge using the authenticated endpoint `POST /api/admin/assignments` with JSON `{ "submissionId": "...", "judgeId": "..." }`. The judge then signs in at `/judges` and evaluates assigned entries. Assignment UI and expanded judge administration are recommended next enhancements.
+Create judges under the Judges tab. Assign a submission to a judge using the authenticated endpoint `POST /api/admin/assignments` with JSON `{ "submissionId": "...", "judgeId": "..." }`. The judge then signs in at `/reviewer` and evaluates assigned entries. Assignment UI and expanded judge administration are recommended next enhancements.
 
 ## API
 - `GET /api/health`, `GET /api/public/settings`, `GET /api/public/entries`
@@ -144,7 +144,7 @@ The Command Centre now includes searchable/filterable submissions, visual judge 
 
 ## Corrective deployment — homepage source and cache
 - The Worker now explicitly serves `public/index.html` for `/` and `/index.html` instead of relying on the asset fallback route.
-- HTML routes (`/`, `/admin`, `/judges`, `/entries`, `/information`, `/track`) receive `Cache-Control: no-store, no-cache, must-revalidate` to prevent an old homepage document being retained by browser/CDN caches.
+- HTML routes (`/`, `/admin`, `/reviewer`, `/entries`, `/information`, `/track`) receive `Cache-Control: no-store, no-cache, must-revalidate` to prevent an old homepage document being retained by browser/CDN caches.
 - The homepage source is the current submission-first design with the updated navigation and entries preview.
 - Deploy from the extracted `mka-ghana-50-portal-main` directory, where `wrangler.toml` and `package.json` are located. Do not deploy from the parent folder or an older project copy.
 

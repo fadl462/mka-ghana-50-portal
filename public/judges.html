@@ -3,31 +3,31 @@
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="theme-color" content="#123b66">
-  <title>Reviewer Workspace | MKA Ghana @ 50</title>
+  <title>Reviewer Room | MKA Ghana @ 50</title>
   <link rel="stylesheet" href="/styles.css">
 </head>
 <body class="admin reviewer-page">
   <header class="reviewer-header">
-    <a class="brand" href="/"><img src="/mka-logo.png" alt=""><span><b>MKA GHANA</b><small>50TH ANNIVERSARY · REVIEWER PORTAL</small></span></a>
-    <a class="reviewer-public-link" href="/entries">View public entries</a>
+    <a class="brand" href="/"><img src="/mka-logo.png" alt=""><span><b>MKA GHANA</b><small>50TH ANNIVERSARY · REVIEWER ROOM</small></span></a>
+    <a class="reviewer-public-link" href="/entries">Public entries</a>
   </header>
   <main class="reviewer-wrap">
     <section id="judgeLogin" class="login reviewer-login">
-      <p class="eyebrow">RESTRICTED ACCESS</p>
-      <h1>Reviewer sign in</h1>
-      <p class="muted reviewer-intro">Access is limited to reviewers approved by the competition administrator. Sign in with the email address and password issued to you.</p>
-      <div class="reviewer-login-help"><strong>Authorised reviewers only</strong><span>There is no public registration. If your email address has not been approved, contact the competition administrator.</span></div>
+      <p class="eyebrow">MKA GHANA @ 50 · SECURE ACCESS</p>
+      <h1>Welcome to the Reviewer Room</h1>
+      <p class="muted reviewer-intro">Sign in with the email address and password provided by the competition administrator to access your assigned entries and confidential assessments.</p>
+      <div class="reviewer-login-help"><span class="reviewer-help-icon">✓</span><div><strong>Private reviewer access</strong><span>Accounts are created by the competition administrator. Self-registration is disabled.</span></div></div>
       <form id="judgePasswordForm" class="form reviewer-login-form">
         <label>Email address<input id="judgeEmail" name="email" type="email" autocomplete="username" placeholder="name@example.com" required></label>
-        <label>Password<input id="judgePassword" name="password" type="password" autocomplete="current-password" placeholder="Enter your password" required></label>
+        <label>Password<span class="reviewer-password"><input id="judgePassword" name="password" type="password" autocomplete="current-password" placeholder="Enter your password" required><button type="button" class="reviewer-show-password" id="toggleJudgePassword" aria-label="Show password">Show</button></span></label>
         <button class="btn dark reviewer-signin" type="submit">Sign in</button>
         <output id="judgeLoginMsg" aria-live="polite"></output>
       </form>
-      <p class="reviewer-security-note">Reviewer access is administrator-controlled. Reviewer assignments and assessments are confidential. Your email address will be remembered on this device; your password will not be stored by the portal.</p>
+      <p class="reviewer-security-note">Your reviewer assignments and assessments are confidential. Your email address is remembered on this device; your password is never saved.</p>
     </section>
 
     <section id="judgeArea" class="hidden reviewer-dashboard">
-      <div class="reviewer-welcome-bar"><div><p class="eyebrow">MKA GHANA @ 50 · CONFIDENTIAL REVIEW</p><h1>Your review workspace</h1><p id="judgeWelcome" class="muted"></p></div><button id="judgeLogout" class="btn outline">Sign out</button></div>
+      <div class="reviewer-welcome-bar"><div><p class="eyebrow">MKA GHANA @ 50 · CONFIDENTIAL REVIEW</p><h1>Reviewer Room</h1><p id="judgeWelcome" class="muted"></p></div><button id="judgeLogout" class="btn outline">Sign out</button></div>
       <div class="judge-summary reviewer-summary" id="judgeSummary"></div>
       <section class="judge-rubric reviewer-rubric"><div><p class="eyebrow">SCORING FRAMEWORK</p><h2>How to assess each entry</h2><p>Give each criterion a score from 0 to 100. The weighted total is calculated automatically when you submit your assessment. Apply the same standard consistently to every assigned entry.</p></div><div class="rubric-weights"><span>Originality <b>25%</b></span><span>Relevance <b>25%</b></span><span>Symbolism <b>20%</b></span><span>Visual quality <b>15%</b></span><span>Versatility <b>15%</b></span></div></section>
       <div class="reviewer-list-toolbar"><div><h2>Assigned entries</h2><p>Assess each design independently. You can return to update your scores before judging closes.</p></div><div class="reviewer-filters"><input id="entrySearch" type="search" placeholder="Search by title or reference" aria-label="Search assigned entries"><select id="entryFilter" aria-label="Filter assigned entries"><option value="all">All entries</option><option value="pending">Awaiting review</option><option value="completed">Reviewed</option></select></div></div>

@@ -26,7 +26,7 @@ The migration SQL must be applied to D1; uploading frontend files alone will
 not repair the database.
 
 Correct login destinations:
-- Reviewer workspace: https://mka-ghana-50-portal.workers.dev/judges
+- Reviewer workspace: https://mka-ghana-50-portal.workers.dev/reviewer
 - Administrator command centre: https://mka-ghana-50-portal.workers.dev/admin
 
 The /admin page now clearly links reviewers to /judges. Both login pages retain

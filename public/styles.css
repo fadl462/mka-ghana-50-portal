@@ -373,3 +373,46 @@ img{max-width:100%}
 #loginMsg,#judgeLoginMsg{display:block;min-height:1.35em;margin-top:10px;font-size:13px;line-height:1.5}
 #loginForm button:disabled,#judgePasswordForm button:disabled{opacity:.72;cursor:wait}
 #loginForm input:focus-visible,#judgePasswordForm input:focus-visible{outline:3px solid rgba(35,145,207,.2);border-color:#238fc9}
+
+
+/* MKA Ghana @ 50 — Reviewer Room login refinement */
+.reviewer-page{background:radial-gradient(circle at 15% 8%,#e5f4ff 0,transparent 34%),linear-gradient(145deg,#f4f8fc 0%,#eef5fb 55%,#f9fbfd 100%)!important}
+.reviewer-header{min-height:76px;padding:14px max(24px,calc((100vw - 1180px)/2));box-shadow:0 5px 24px rgba(18,59,102,.045)}
+.reviewer-header .brand img{width:42px;height:42px;object-fit:contain}
+.reviewer-header .brand b{font-size:15px;letter-spacing:.035em;color:#123b66}
+.reviewer-header .brand small{font-size:9px;color:#758ba0;letter-spacing:.16em}
+.reviewer-public-link{padding:10px 15px;border:1px solid #d7e7f4;border-radius:9px;background:#fff;color:#1766a8}
+.reviewer-wrap{max-width:1120px;padding:58px 24px 90px}
+.reviewer-login{max-width:500px;margin:22px auto;padding:40px 42px 34px;border:1px solid #dce9f4;border-radius:20px;background:rgba(255,255,255,.97);box-shadow:0 24px 70px rgba(18,59,102,.10)}
+.reviewer-login .eyebrow{color:#b17b2b;font-size:10px;font-weight:800;letter-spacing:.18em}
+.reviewer-login h1{font-size:29px;line-height:1.22;letter-spacing:-.035em;color:#123b66;margin:10px 0 12px}
+.reviewer-intro{font-size:13px;line-height:1.75;color:#60758a;margin:0}
+.reviewer-login-help{display:flex;align-items:center;gap:12px;margin:23px 0;padding:14px 15px;border:1px solid #d7e9f6;border-radius:12px;background:#f4faff;color:#536d83}
+.reviewer-help-icon{display:grid;place-items:center;flex:0 0 30px;width:30px;height:30px;border-radius:50%;background:#e1f1fc;color:#1766a8;font-weight:900}
+.reviewer-login-help div{display:grid;gap:3px}
+.reviewer-login-help strong{font-size:12px;color:#123b66}
+.reviewer-login-help span:not(.reviewer-help-icon){font-size:11px;line-height:1.5}
+.reviewer-login-form{gap:17px;margin-top:24px}
+.reviewer-login-form label{gap:8px;font-size:12px;font-weight:700;color:#36536d}
+.reviewer-login-form input{min-height:49px;padding:13px 14px;border:1px solid #d7e3ee;border-radius:9px;font-size:13px;transition:border-color .15s,box-shadow .15s}
+.reviewer-login-form input:focus{border-color:#2c91c8;box-shadow:0 0 0 4px rgba(44,145,200,.12)}
+.reviewer-password{display:block}
+.reviewer-password input{padding-right:68px}
+.reviewer-show-password{right:7px;top:50%;border:0;background:#eef6fc;color:#1766a8;border-radius:7px;padding:7px 10px;font-size:11px}
+.reviewer-signin{min-height:49px;margin-top:3px;border:0;border-radius:9px;background:linear-gradient(105deg,#123b66,#167bb1);color:#fff;font-size:13px;font-weight:800;box-shadow:0 8px 18px rgba(22,123,177,.17);transition:transform .15s,box-shadow .15s}
+.reviewer-signin:hover{transform:translateY(-1px);box-shadow:0 11px 22px rgba(22,123,177,.22)}
+.reviewer-signin:disabled{opacity:.65;cursor:wait;transform:none}
+#judgeLoginMsg{display:block;min-height:18px;font-size:12px;line-height:1.5}
+#judgeLoginMsg.error{color:#b42318}
+.reviewer-security-note{margin-top:22px;padding-top:16px;font-size:10px;line-height:1.7;color:#8495a5}
+.admin>header .admin-reviewer-toplink{display:inline-flex;align-items:center;padding:9px 14px;border:1px solid #d7e7f4;border-radius:9px;background:#f5faff;color:#1766a8;text-decoration:none;font-size:12px;font-weight:800}
+.admin-reviewer-switch{margin-top:22px;padding:13px 15px;border:1px solid #d7e7f4;border-radius:10px;background:#f5faff;font-size:12px;line-height:1.6}
+.admin-reviewer-switch a{color:#1766a8;font-weight:800}
+@media(max-width:600px){
+ .reviewer-header{padding:12px 16px}
+ .reviewer-header .brand small{font-size:8px}
+ .reviewer-wrap{padding:28px 14px 56px}
+ .reviewer-login{margin:8px auto;padding:28px 22px 24px;border-radius:16px}
+ .reviewer-login h1{font-size:25px}
+ .reviewer-welcome-bar{align-items:flex-start;flex-direction:column}
+}

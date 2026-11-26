@@ -97,7 +97,7 @@ async function servePage(path,env){
 export default {async fetch(req,env){
   const u=new URL(req.url),p=u.pathname.replace(/\/$/,'')||'/';
   if(p.startsWith('/api/')){try{return await api(req,env)}catch(e){console.error(e);return fail('Unexpected server error.',500)}}
-  const pages={'/':'/information.html','/index.html':'/information.html','/information':'/information.html','/submit':'/index.html','/admin':'/admin.html','/judges':'/judges.html','/entries':'/entries.html','/track':'/track.html'};
+  const pages={'/':'/information.html','/index.html':'/information.html','/information':'/information.html','/submit':'/index.html','/admin':'/admin.html','/judges':'/judges.html','/reviewer':'/judges.html','/entries':'/entries.html','/track':'/track.html'};
   if(pages[p]&&['GET','HEAD'].includes(req.method))return servePage(pages[p],env);
   return env.ASSETS.fetch(req);
 }};
