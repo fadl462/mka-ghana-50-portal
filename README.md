@@ -167,3 +167,12 @@ The Command Centre now includes searchable/filterable submissions, visual judge 
 
 Reviewer access is administrator-controlled. Public reviewer registration is disabled. The initial reviewer `fadl_rahman3@yahoo.com` is provisioned by migration `0008_reviewer_password_login.sql`. Reviewer passwords are stored as PBKDF2-SHA256 hashes; no Resend or email OTP configuration is required for reviewer login. See `REVIEWER-PASSWORD-DEPLOYMENT-NOTES.txt` for deployment and access details.
 
+
+
+## Stage 7 — Reviewer Room shared assessment workspace
+- The Reviewer Room now lists every live submission, not only entries individually assigned to a reviewer. Withdrawn submissions remain excluded.
+- Every authorised reviewer can open the artwork and review the team's current scorecards and shared reviewer notes.
+- Each reviewer retains an individual scorecard. Updating an existing scorecard requires a reason.
+- Revision reasons and prior scores/notes are retained in `reviewer_assessment_revisions` and displayed to authorised reviewers only. They are not exposed through public entry or contestant tracking APIs.
+- Reviewer notes are separate from contestant-facing feedback. The reviewer notes are shared within the reviewer team and are not published to contestants.
+- Apply migration `0010_reviewer_shared_assessments.sql` to the production D1 database before deploying the updated Worker.

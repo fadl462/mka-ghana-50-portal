@@ -416,3 +416,86 @@ img{max-width:100%}
  .reviewer-login h1{font-size:25px}
  .reviewer-welcome-bar{align-items:flex-start;flex-direction:column}
 }
+
+
+/* Reviewer Room — shared assessment workspace refresh */
+.reviewer-list-toolbar{gap:22px;align-items:flex-end}
+.reviewer-list-toolbar>div:first-child{max-width:560px}
+.reviewer-filters{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.reviewer-refresh{white-space:nowrap;min-height:44px}
+.reviewer-entry-list{gap:22px}
+.reviewer-card{border:1px solid #d8e7f5;border-radius:20px;box-shadow:0 12px 34px rgba(25,73,112,.07);overflow:hidden}
+.reviewer-card .judge-review-head{padding:22px 24px;background:linear-gradient(120deg,#fff 0%,#f4f9ff 100%);align-items:center}
+.reviewer-card .judge-review-head h3{font-size:23px;letter-spacing:-.025em}
+.entry-submitted-date{font-size:10px;font-weight:500;color:#8193a7;letter-spacing:0}
+.team-reviewed-badge{display:inline-flex;margin:9px 0 0 8px;padding:5px 9px;border-radius:20px;background:#eaf4ff;color:#1766a8;font-size:10px;font-weight:800;vertical-align:middle}
+.reviewer-card-score{min-width:132px}
+.reviewer-artwork{padding:22px 24px;gap:22px}
+.reviewer-image-wrap{border-radius:14px;overflow:hidden;background:#edf4fb}
+.reviewer-image-wrap img{width:100%;height:100%;max-height:420px;object-fit:contain;background:#edf4fb}
+.reviewer-rationale{padding:18px 20px;border:1px solid #e3edf6;border-radius:14px;background:#fbfdff}
+.reviewer-rationale h4,.team-review-heading h4,.reviewer-section-heading h4{font-size:16px;color:#123b66}
+.team-review-panel{margin:0 24px 20px;padding:20px;border:1px solid #d9e8f6;border-radius:16px;background:#f7fbff}
+.team-review-heading{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:14px}
+.team-review-heading .eyebrow{margin:0 0 6px;font-size:9px}
+.team-review-heading h4{margin:0 0 4px}
+.team-review-heading p{margin:0;color:#68819b;font-size:11px;line-height:1.6}
+.team-review-count{flex-shrink:0;padding:7px 10px;border-radius:30px;background:#e5f1fc;color:#155b91;font-size:10px;font-weight:800}
+.team-review-empty{margin:0;padding:14px;border:1px dashed #cbddec;border-radius:10px;color:#70869b;font-size:12px}
+.team-review-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.team-review-item{min-width:0;padding:15px;border:1px solid #e0ebf5;border-radius:12px;background:#fff}
+.team-review-top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+.team-review-top>div{display:grid;gap:4px}
+.team-review-top strong{font-size:12px;color:#183f65}
+.team-review-top small{font-size:9px;color:#8496a8}
+.team-review-score{font-size:20px;color:#0878b9;white-space:nowrap}
+.team-review-score small{font-size:10px;color:#8a9bad}
+.team-review-breakdown{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:5px;margin:13px 0}
+.team-review-breakdown span{display:grid;gap:4px;padding:7px 5px;border-radius:7px;background:#f2f7fc;color:#71859a;font-size:8px;text-align:center}
+.team-review-breakdown b{font-size:12px;color:#174a75}
+.team-review-note,.team-review-reason{margin-top:9px;padding:10px 11px;border-radius:9px;background:#f5f9fd}
+.team-review-note b,.team-review-reason b{font-size:10px;color:#245b87}
+.team-review-note p,.team-review-reason p{margin:4px 0 0;color:#526c84;font-size:11px;line-height:1.6;white-space:pre-wrap;overflow-wrap:anywhere}
+.team-review-reason{border:1px solid #f0dfb8;background:#fffaf0}
+.team-review-reason b{color:#8a5b0b}
+.reviewer-evaluation{padding:22px 24px 24px;border-top:1px solid #e6eef6;background:#fff}
+.reviewer-section-heading{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;margin-bottom:16px}
+.reviewer-section-heading .eyebrow{margin:0 0 5px;font-size:9px}
+.reviewer-section-heading h4{margin:0 0 4px}
+.reviewer-section-heading p{margin:0;color:#71859a;font-size:11px}
+.reviewer-required-note{padding:7px 10px;border-radius:20px;background:#edf6ff;color:#1766a8;font-size:10px;font-weight:800;white-space:nowrap}
+.reviewer-evaluation .scores{gap:10px}
+.reviewer-evaluation .scores label{padding:12px;border:1px solid #e2ebf4;border-radius:11px;background:#fbfdff}
+.reviewer-evaluation .scores input{border-radius:8px;border-color:#d5e3f0}
+.reviewer-notes-label,.reviewer-overwrite-label{display:grid;gap:7px;margin-top:18px;color:#214b70;font-size:12px;font-weight:800}
+.reviewer-notes-label>span,.reviewer-overwrite-label>span{font-size:10px;font-weight:500;color:#71869a}
+.reviewer-notes-label textarea,.reviewer-overwrite-label textarea{width:100%;min-height:82px;padding:12px;border:1px solid #d8e5f0;border-radius:10px;background:#fbfdff;font:inherit;font-size:12px;line-height:1.6;resize:vertical}
+.reviewer-overwrite-label{padding:14px;border:1px solid #f0dfb8;border-radius:12px;background:#fffaf0}
+.reviewer-overwrite-label textarea{background:#fff;border-color:#ead8b3}
+.reviewer-evaluation .judge-form-foot{margin-top:18px;padding-top:16px;border-top:1px solid #edf2f7}
+.reviewer-evaluation .judge-form-foot small{max-width:65%;line-height:1.6}
+.reviewer-total-ratings{display:block;margin-top:10px;color:#8094a8;font-size:9px}
+.reviewer-progress-card{min-width:240px}
+@media(max-width:760px){
+ .reviewer-list-toolbar{align-items:stretch;flex-direction:column}
+ .reviewer-filters{display:grid;grid-template-columns:1fr 1fr}
+ .reviewer-filters input{grid-column:1/-1;width:100%}
+ .reviewer-refresh{grid-column:1/-1}
+ .team-review-list{grid-template-columns:1fr}
+ .reviewer-card .judge-review-head{padding:18px;align-items:flex-start}
+ .reviewer-artwork{padding:16px;grid-template-columns:1fr}
+ .team-review-panel{margin:0 16px 16px;padding:15px}
+ .reviewer-evaluation{padding:18px 16px}
+ .reviewer-section-heading{align-items:flex-start;flex-direction:column}
+ .reviewer-evaluation .judge-form-foot{align-items:stretch;flex-direction:column}
+ .reviewer-evaluation .judge-form-foot small{max-width:none}
+ .team-review-breakdown{grid-template-columns:repeat(5,minmax(0,1fr))}
+}
+
+.team-revision-history{margin-top:15px;padding-top:14px;border-top:1px solid #dce8f2}
+.team-revision-history h5{margin:0 0 10px;color:#245b87;font-size:11px}
+.team-revision-history article{display:grid;gap:5px;margin-top:8px;padding:10px 12px;border-radius:9px;background:#fffaf0;border:1px solid #f0dfb8}
+.team-revision-history article>div{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.team-revision-history strong{font-size:10px;color:#80570f}
+.team-revision-history small{font-size:9px;color:#8a795e}
+.team-revision-history p{margin:0;font-size:11px;line-height:1.55;color:#70551f;white-space:pre-wrap}

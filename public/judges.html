@@ -15,7 +15,7 @@
     <section id="judgeLogin" class="login reviewer-login">
       <p class="eyebrow">MKA GHANA @ 50 · SECURE ACCESS</p>
       <h1>Welcome to the Reviewer Room</h1>
-      <p class="muted reviewer-intro">Sign in with the email address and password provided by the competition administrator to access your assigned entries and confidential assessments.</p>
+      <p class="muted reviewer-intro">Sign in with the email address and password provided by the competition administrator to review all submitted entries, score each design and share confidential notes with the reviewer team.</p>
       <div class="reviewer-login-help"><span class="reviewer-help-icon">✓</span><div><strong>Private reviewer access</strong><span>Accounts are created by the competition administrator. Self-registration is disabled.</span></div></div>
       <form id="judgePasswordForm" class="form reviewer-login-form">
         <label>Email address<input id="judgeEmail" name="email" type="email" autocomplete="username" placeholder="name@example.com" required></label>
@@ -23,14 +23,14 @@
         <button class="btn dark reviewer-signin" type="submit">Sign in</button>
         <output id="judgeLoginMsg" aria-live="polite"></output>
       </form>
-      <p class="reviewer-security-note">Your reviewer assignments and assessments are confidential. Your email address is remembered on this device; your password is never saved.</p>
+      <p class="reviewer-security-note">Your assessments and reviewer notes are confidential to the authorised reviewer team. Your email address is remembered on this device; your password is never saved.</p>
     </section>
 
     <section id="judgeArea" class="hidden reviewer-dashboard">
       <div class="reviewer-welcome-bar"><div><p class="eyebrow">MKA GHANA @ 50 · CONFIDENTIAL REVIEW</p><h1>Reviewer Room</h1><p id="judgeWelcome" class="muted"></p></div><button id="judgeLogout" class="btn outline">Sign out</button></div>
       <div class="judge-summary reviewer-summary" id="judgeSummary"></div>
-      <section class="judge-rubric reviewer-rubric"><div><p class="eyebrow">SCORING FRAMEWORK</p><h2>How to assess each entry</h2><p>Give each criterion a score from 0 to 100. The weighted total is calculated automatically when you submit your assessment. Apply the same standard consistently to every assigned entry.</p></div><div class="rubric-weights"><span>Originality <b>25%</b></span><span>Relevance <b>25%</b></span><span>Symbolism <b>20%</b></span><span>Visual quality <b>15%</b></span><span>Versatility <b>15%</b></span></div></section>
-      <div class="reviewer-list-toolbar"><div><h2>Assigned entries</h2><p>Assess each design independently. You can return to update your scores before judging closes.</p></div><div class="reviewer-filters"><input id="entrySearch" type="search" placeholder="Search by title or reference" aria-label="Search assigned entries"><select id="entryFilter" aria-label="Filter assigned entries"><option value="all">All entries</option><option value="pending">Awaiting review</option><option value="completed">Reviewed</option></select></div></div>
+      <section class="judge-rubric reviewer-rubric"><div><p class="eyebrow">SCORING FRAMEWORK</p><h2>Scoring framework</h2><p>Give each criterion a score from 0 to 100. The weighted total is calculated automatically when you submit your assessment. Apply the same standard consistently to every submission.</p></div><div class="rubric-weights"><span>Originality <b>25%</b></span><span>Relevance <b>25%</b></span><span>Symbolism <b>20%</b></span><span>Visual quality <b>15%</b></span><span>Versatility <b>15%</b></span></div></section>
+      <div class="reviewer-list-toolbar"><div><h2>All submitted entries</h2><p>Every live submission is available to the reviewer team. See existing ratings and shared notes before adding your assessment.</p></div><div class="reviewer-filters"><input id="entrySearch" type="search" placeholder="Search title or reference" aria-label="Search assigned entries"><select id="entryFilter" aria-label="Filter submissions"><option value="all">All entries</option><option value="pending">Awaiting review</option><option value="completed">Reviewed</option></select><button id="refreshEntries" class="btn outline reviewer-refresh" type="button">Refresh entries</button></div></div>
       <div id="judgeEntries" class="judge-entry-list reviewer-entry-list" aria-live="polite"></div>
     </section>
   </main>
